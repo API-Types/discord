@@ -12,6 +12,8 @@ export * from './topics';
  */
 export const DiscordEpoch = 1_420_070_400_000;
 
+export const DefaultRoleColor = '#99AAB5';
+
 export enum BaseURL {
 	/**
 	 * @source {@link https://discord.com/developers/docs/reference#api-reference-base-url|Reference}
