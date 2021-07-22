@@ -12,7 +12,7 @@ import type {
 	Snowflake,
 	User
 } from '../';
-import type { BaseInteraction, GuildIdentifiable, Identifiable, PartialTuple } from '../__internal__';
+import type { BaseInteraction, GuildIdentifiable, Identifiable, PartialTuple, WithType } from '../__internal__';
 
 /**
  * @source {@link https://discord.com/developers/docs/interactions/slash-commands#a-quick-note-on-limits|Slash Commands}
@@ -208,12 +208,7 @@ export interface GuildApplicationCommandPermissions
  *
  * @source {@link https://discord.com/developers/docs/interactions/slash-commands#application-command-permissions-object-application-command-permissions-structure|Slash Commands}
  */
-export interface ApplicationCommandPermissions extends Identifiable {
-	/**
-	 * Role or user.
-	 */
-	type: ApplicationCommandPermissionType;
-
+export interface ApplicationCommandPermissions extends Identifiable, WithType<ApplicationCommandPermissionType> {
 	/**
 	 * `true` to allow, `false` to disallow.
 	 */
@@ -355,12 +350,7 @@ export type ApplicationCommandInteractionDataOption = {
 /**
  * @source {@link https://discord.com/developers/docs/interactions/slash-commands#interaction-response|Slash Commands}
  */
-export interface InteractionResponse {
-	/**
-	 * The type of response.
-	 */
-	type: InteractionCallbackType;
-
+export interface InteractionResponse extends WithType<InteractionCallbackType> {
 	/**
 	 * An optional response message.
 	 */
@@ -436,12 +426,7 @@ export enum InteractionApplicationCommandCallbackDataFlags {
  *
  * @source {@link https://discord.com/developers/docs/interactions/slash-commands#messageinteraction|Slash Commands}
  */
-export interface MessageInteraction extends Identifiable {
-	/**
-	 * The type of interaction.
-	 */
-	type: InteractionRequestType;
-
+export interface MessageInteraction extends Identifiable, WithType<InteractionRequestType> {
 	/**
 	 * The name of the `ApplicationCommand`.
 	 */
