@@ -52,3 +52,17 @@ export interface Emoji extends PartialEmoji {
 	 */
 	available?: boolean;
 }
+
+export enum EmojiDisabledReason {
+	DisallowExternal = 'DISALLOW_EXTERNAL',
+	GuildSubscriptionUnavailable = 'GUILD_SUBSCRIPTION_UNAVAILABLE',
+	PremiumLocked = 'PREMIUM_LOCKED'
+}
+
+export enum EmojiIntention {
+	Reaction = 'REACTION',
+	Status = 'STATUS',
+	CommunityContent = 'COMMUNITY_CONTENT',
+	GuildStickerRelatedEmoji = 'GUILD_STICKER_RELATED_EMOJI',
+	GuildRoleBenefitEmoji = 'GUILD_ROLE_BENEFIT_EMOJI'
+}
