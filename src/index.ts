@@ -52,10 +52,10 @@ export interface ObjectError {
 	readonly [field: string]: ArrayError | DeepReadonly<{ _errors: { code: string; message: string }[] }>;
 }
 
-export enum ClientReleaseChannel {
+export enum PublicReleaseChannel {
 	Stable = 'stable',
-	Beta = 'ptb',
-	Alpha = 'canary'
+	PTB = 'ptb',
+	Canary = 'canary'
 }
 
 /**
