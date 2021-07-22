@@ -19,11 +19,6 @@ export interface PartialChannel extends Identifiable, WithType<ChannelType> {
 	 * The name of the channel (`1-100` characters).
 	 */
 	name: string;
-
-	/**
-	 * The computed permissions for the invoking user in that channel, including overwrites.
-	 */
-	permissions?: string;
 }
 
 /**

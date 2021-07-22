@@ -307,7 +307,15 @@ export interface ApplicationCommandInteractionDataResolved {
 	users?: Record<Snowflake, User>;
 	members?: Record<Snowflake, PartialGuildMember & Required<Pick<GuildMember, 'user'>>>;
 	roles?: Record<Snowflake, Role>;
-	channels?: Record<Snowflake, PartialChannel>;
+	channels?: Record<
+		Snowflake,
+		PartialChannel & {
+			/**
+			 * The computed permissions for the invoking user in that channel, including overwrites.
+			 */
+			permissions: string;
+		}
+	>;
 }
 
 /**
