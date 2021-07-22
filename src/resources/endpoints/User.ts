@@ -145,7 +145,7 @@ export interface GetUserConnections {
 /**
  * @endpoint GET `/users/@me/relationships`
  */
-export interface GetCurrentUserRelationships {
+export interface GetUserRelationships {
 	response: Relationship[];
 }
 
