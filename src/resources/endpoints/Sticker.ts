@@ -22,8 +22,8 @@ export interface ListNitroStickerPacks {
 }
 
 /**
- * Returns a sticker object for the given guild and sticker IDs. Includes the `user` field if the
- * bot has the `MANAGE_EMOJIS_AND_STICKERS` permission.
+ * Returns an array of sticker objects for the givne guild. Includes the user `fields` if the bot
+ * has the `MANAGE_EMOJIS_AND_STICKERS` permission.
  *
  * @endpoint GET `/guilds/{guild.id}/stickers`
  */
@@ -32,10 +32,8 @@ export interface ListGuildStickers {
 }
 
 /**
- * Create a new sticker for the guild. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission.
- *
- * @remarks
- * Send a `multipart/form-data` body.
+ * Returns a sticker object for the given guild and sticker IDs. Includes the `user` field if the
+ * bot has the `MANAGE_EMOJIS_AND_STICKERS` permission.
  *
  * @endpoint GET `/guilds/{guild.id}/stickers/{sticker.id}`
  */
@@ -44,7 +42,14 @@ export interface GetGuildSticker {
 }
 
 /**
- * Modify the given sticker. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission.
+ * Create a new sticker for the guild. Returns the new sticker object on success.
+ *
+ * Requires the `MANAGE_EMOJIS_AND_STICKERS` permission.
+ *
+ * Send a `multipart/form-data` body.
+ *
+ * @remarks
+ * This endpoint supports the `X-Audit-Log-Reason` header.
  *
  * @endpoint POST `/guilds/{guild.id}/stickers`
  */
@@ -77,7 +82,12 @@ export interface CreateGuildSticker {
 }
 
 /**
- * Delete the given sticker. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission.
+ * Modify the given sticker. Returnes the updated sticker object on success.
+ *
+ * Requires the `MANAGE_EMOJIS_AND_STICKERS` permission.
+ *
+ * @remarks
+ * This endpoint supports the `X-Audit-Log-Reason` header.
  *
  * @endpoint PATCH `/guilds/{guild.id}/stickers/{sticker.id}`
  */
@@ -90,6 +100,13 @@ export interface ModifyGuildSticker {
 }
 
 /**
+ * Delete the given sticker. Returns `204 No Content` on success.
+ *
+ * Requires the `MANAGE_EMOJIS_AND_STICKERS` permission.
+ *
+ * @remarks
+ * This endpoint supports the `X-Audit-Log-Reason` header.
+ *
  * @endpoint DELETE `/guilds/{guild.id}/stickers/{sticker.id}`
  */
 export interface DeleteGuildSticker {
