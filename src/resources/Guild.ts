@@ -2,6 +2,7 @@ import type { Nullable, Tuple } from 'extended-utility-types';
 import type {
 	Channel,
 	Emoji,
+	GuildSticker,
 	PartialChannel,
 	PartialUser,
 	PresenceUpdate,
@@ -9,7 +10,6 @@ import type {
 	Snowflake,
 	StageInstance,
 	StatusType,
-	Sticker,
 	ThreadChannel,
 	User,
 	VoiceState
@@ -269,11 +269,7 @@ export interface Guild extends PartialGuild {
 	welcome_screen?: WelcomeScreen;
 	nsfw_level: GuildNSFWLevel;
 	stage_instances?: StageInstance[];
-
-	/**
-	 * Custom guild stickers.
-	 */
-	stickers?: Sticker[];
+	stickers?: GuildSticker[];
 }
 
 /**
