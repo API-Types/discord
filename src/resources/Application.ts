@@ -94,6 +94,8 @@ export interface Application extends Omit<PartialApplication, 'hook'> {
 }
 
 export enum ApplicationFlags {
+	ManagedEmoji = 1 << 2,
+	GroupDMCreate = 1 << 4,
 	GatewayPresence = 1 << 12,
 	GatewayPresenceLimited = 1 << 13,
 	GatewayGuildMembers = 1 << 14,
