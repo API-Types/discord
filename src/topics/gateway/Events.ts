@@ -53,6 +53,7 @@ export type GatewayEventPayload =
 	| GuildBanAdd
 	| GuildBanRemove
 	| GuildEmojisUpdate
+	| GuildStickersUpdate
 	| GuildIntegrationsUpdate
 	| GuildMemberAdd
 	| GuildMemberRemove
