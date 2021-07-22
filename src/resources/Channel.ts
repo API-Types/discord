@@ -94,7 +94,8 @@ export enum ChannelType {
 	/**
 	 * A voice channel for hosting events with an audience.
 	 */
-	GuildStageVoice
+	GuildStageVoice,
+	GuildDirectory
 }
 
 /**
