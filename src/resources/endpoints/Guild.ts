@@ -28,7 +28,7 @@ import type {
 	WelcomeScreen,
 	WelcomeScreenChannel
 } from '../../';
-import type { GuildIdentifiable, Identifiable } from '../../__internal__';
+import type { GuildIdentifiable, Identifiable, PartialTuple } from '../../__internal__';
 
 /**
  * Create a new guild. Returns a guild object on success. Fires a Guild Create Gateway event.
@@ -1148,7 +1148,7 @@ export interface ModifyMembershipScreening {
  */
 export interface SearchGuildMessages {
 	query: {
-		content: string;
+		content?: string;
 		author_id?: Snowflake;
 		mentions?: Snowflake;
 		has?: 'link' | 'embed' | 'video' | 'image' | 'file' | 'sound';
@@ -1160,7 +1160,7 @@ export interface SearchGuildMessages {
 	};
 
 	response: {
-		messages: [Message & { hit: boolean }][];
+		messages: PartialTuple<Message & { hit: boolean }, 25>;
 		total_results: number;
 	};
 }
