@@ -451,9 +451,30 @@ export enum JSONErrorCode {
 	InvalidLottieJSON = 170_001,
 
 	/**
+	 * Uploaded Lotties cannot contain rasterized images such as `PNG` or `JPEG`.
+	 */
+	InvalidLottieRasterizedImage,
+	StickerFrameRateExceeded,
+
+	/**
+	 * Sticker frame count exceeds maximum of `1000` frames.
+	 */
+	StickerFrameCountExceeded,
+
+	/**
 	 * Lottie animation maximum dimensions exceeded.
 	 */
-	InvalidLottieAnimationDimensions = 170_005
+	LottieAnimationDimensionsExceeded,
+
+	/**
+	 * Sticker frame rate is either too small or too large.
+	 */
+	InvalidStickerFrameRate,
+
+	/**
+	 * Sticker animation duration exceeds maximum of `5` seconds.
+	 */
+	StickerAnimationDurationExceeded
 }
 
 /**
