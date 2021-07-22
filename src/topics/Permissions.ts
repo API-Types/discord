@@ -228,7 +228,12 @@ export enum PermissionFlags {
 	/**
 	 * Allows for creating and participating in private threads.
 	 */
-	UsePrivateThreads = 1 << 36
+	UsePrivateThreads = 1 << 36,
+
+	/**
+	 * Allows the usage of custom stickers from other servers.
+	 */
+	UseExternalStickers = 1 << 37
 }
 
 export type Permission =
