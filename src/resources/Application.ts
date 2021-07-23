@@ -104,6 +104,14 @@ export enum ApplicationFlags {
 	Embedded = 1 << 17
 }
 
+export enum LibraryApplicationFlags {
+	Hidden = 1 << 0,
+	Private = 1 << 1,
+	OverlayDisabled = 1 << 2,
+	Entitled = 1 << 3,
+	Premium = 1 << 4
+}
+
 export interface ApplicationAsset extends Identifiable {
 	name: string;
 	type: number;
