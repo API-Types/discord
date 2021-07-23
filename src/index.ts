@@ -8,7 +8,7 @@ export * from './topics';
 /**
  * Milliseconds since Discord Epoch, the first second of `2015` or `1420070400000`.
  *
- * @source {@link https://discord.com/developers/docs/reference#snowflakes|Reference}
+ * @source {@Link https://discord.com/developers/docs/reference#snowflakes|Reference}
  */
 export const DiscordEpoch = 1_420_070_400_000;
 
@@ -16,12 +16,12 @@ export const DefaultRoleColor = '#99AAB5';
 
 export enum BaseURL {
 	/**
-	 * @source {@link https://discord.com/developers/docs/reference#api-reference-base-url|Reference}
+	 * @source {@Link https://discord.com/developers/docs/reference#api-reference-base-url|Reference}
 	 */
 	API = 'https://discord.com/api/v9',
 
 	/**
-	 * @source {@link https://discord.com/developers/docs/reference#image-formatting-image-base-url|Reference}
+	 * @source {@Link https://discord.com/developers/docs/reference#image-formatting-image-base-url|Reference}
 	 */
 	CDN = 'https://cdn.discordapp.com'
 }
@@ -30,7 +30,7 @@ export enum BaseURL {
  * Error responses will specify which JSON key contains the error, the error code, and a human
  * readable error message.
  *
- * @source {@link https://discord.com/developers/docs/reference#error-messages|Reference}
+ * @source {@Link https://discord.com/developers/docs/reference#error-messages|Reference}
  */
 export interface ErrorResponse {
 	readonly code: JSONErrorCode;
@@ -39,14 +39,14 @@ export interface ErrorResponse {
 }
 
 /**
- * @source {@link https://discord.com/developers/docs/reference#error-messages-array-error|Reference}
+ * @source {@Link https://discord.com/developers/docs/reference#error-messages-array-error|Reference}
  */
 export interface ArrayError {
 	readonly [index: `${number}`]: ObjectError;
 }
 
 /**
- * @source {@link https://discord.com/developers/docs/reference#error-messages-object-error|Reference}
+ * @source {@Link https://discord.com/developers/docs/reference#error-messages-object-error|Reference}
  */
 export interface ObjectError {
 	readonly [field: string]: ArrayError | DeepReadonly<{ _errors: { code: string; message: string }[] }>;
@@ -64,7 +64,7 @@ export enum PublicReleaseChannel {
  * child objects share their parent's ID. Because Snowflake IDs are up to `64` bits in size, they
  * are always returned as strings in the HTTP API to prevent integer overflows in some languages.
  *
- * @source {@link https://discord.com/developers/docs/reference#snowflakes|Reference}
+ * @source {@Link https://discord.com/developers/docs/reference#snowflakes|Reference}
  */
 export type Snowflake = `${bigint}`;
 
@@ -79,7 +79,7 @@ export type Snowflake = `${bigint}`;
  *
  * Timestamps will display the given timestamp in the user's timezone and locale.
  *
- * @source {@link https://discord.com/developers/docs/reference#message-formatting|Reference}
+ * @source {@Link https://discord.com/developers/docs/reference#message-formatting|Reference}
  */
 export type MessageFormats =
 	| UserFormat
@@ -108,7 +108,7 @@ export type UnixTimestampFormat = `<t:${number}>`;
 export type UnixTimestampStyledFormat = `<t:${number}:${TimestampStyle}>`;
 
 /**
- * @source {@link https://discord.com/developers/docs/reference#message-formatting-timestamp-styles|Reference}
+ * @source {@Link https://discord.com/developers/docs/reference#message-formatting-timestamp-styles|Reference}
  */
 export enum TimestampStyle {
 	/**
@@ -145,6 +145,14 @@ export enum TimestampStyle {
 	 * @example '2 months ago'
 	 */
 	RelativeTime = 'R'
+}
+
+export enum DiscordColor {
+	Blurple = '#5865f2',
+	Green = '#57F287',
+	Yellow = '#FEE75C',
+	Fuchsia = '#EB459E',
+	Red = '#ED4245'
 }
 
 export enum DiscordLimit {
