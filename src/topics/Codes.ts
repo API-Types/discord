@@ -678,3 +678,14 @@ export enum VoiceOPCode {
 	 */
 	ClientDisconnect = 13
 }
+
+export enum LobbyError {
+	NoError,
+	UnknownError,
+	ServiceUnavailable,
+	NotFound,
+	InvalidSecret,
+	Full,
+	LobbyLimitReached,
+	AlreadyConnecting
+}
