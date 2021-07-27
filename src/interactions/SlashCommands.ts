@@ -131,7 +131,7 @@ export type ApplicationCommandOption = {
 			choices: ApplicationCommandOptionChoiceType<string>;
 	  }
 	| {
-			type: 4;
+			type: 4 | 10;
 			choices: ApplicationCommandOptionChoiceType<number>;
 	  }
 	| {
@@ -156,12 +156,29 @@ export enum ApplicationCommandOptionType {
 	 */
 	SubCommandGroup,
 	String,
+
+	/**
+	 * Any integer between `-2 ^ 53` and `2 ^ 53`.
+	 */
 	Integer,
 	Boolean,
 	User,
+
+	/**
+	 * Includes all channel types + categories.
+	 */
 	Channel,
 	Role,
-	Mentionable
+
+	/**
+	 * Includes users and roles.
+	 */
+	Mentionable,
+
+	/**
+	 * Any double between `-2 ^ 53` and `2 ^ 53`.
+	 */
+	Number
 }
 
 /**
@@ -342,7 +359,7 @@ export type ApplicationCommandInteractionDataOption = {
 			value: string;
 	  }
 	| {
-			type: 4;
+			type: 4 | 10;
 			value: number;
 	  }
 	| {
