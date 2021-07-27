@@ -129,7 +129,9 @@ export interface MutualGuild extends Identifiable {
 	nick: Nullable<string>;
 }
 
-export interface PartialConnection extends Identifiable, WithType<PlatformType> {
+export interface PartialConnection extends WithType<PlatformType> {
+	readonly id: string;
+
 	/**
 	 * The username of the connection account.
 	 */
