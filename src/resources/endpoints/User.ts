@@ -1,5 +1,5 @@
 import type { Nullable, Range } from 'extended-utility-types';
-import type { Connection, DMChannel, PartialGuild, Profile, Relationship, Snowflake, User } from '../../';
+import type { Connection, DMChannel, PartialGuild, Profile, Relationship, Snowflake, User, UserSettings } from '../../';
 
 /**
  * Returns the user object of the requester's account.
@@ -158,4 +158,12 @@ export interface GetUserProfile {
 	};
 
 	response: Profile;
+}
+
+/**
+ * @endpoint PATCH `/users/@me/settings`
+ */
+export interface ModifyUserSettings {
+	body: Partial<UserSettings>;
+	response: UserSettings;
 }

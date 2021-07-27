@@ -1,5 +1,5 @@
 import type { Nullable } from 'extended-utility-types';
-import type { PartialIntegration, Snowflake } from '../';
+import type { PartialIntegration, Snowflake, StatusType } from '../';
 import type { Identifiable, WithType } from '../__internal__';
 
 export interface PartialUser {
@@ -242,4 +242,161 @@ export enum RelationshipType {
 	 * User is not friends, but interacts with current user often (frequency + recency).
 	 */
 	Implicit
+}
+
+export interface UserSettings {
+	/**
+	 * Control how long you need to be inactive on desktop, in minutes, before receiving
+	 * push notifications.
+	 */
+	afk_timeout: PushNotificationInactiveTimeout;
+
+	/**
+	 * Allows Discord to record when a screen reader is being used while using Discord to improve
+	 * accessibility.
+	 */
+	allow_accessibility_detection: boolean;
+
+	/**
+	 * Play animated emojis.
+	 */
+	animate_emoji: boolean;
+
+	/**
+	 * Controls when stickers animate.
+	 */
+	animate_stickers: AnimateSticker;
+	contact_sync_enabled: boolean;
+
+	/**
+	 * Automatically convert emoticons in messages to emojis.
+	 */
+	convert_emoticons: boolean;
+	custom_status: CustomStatus;
+
+	/**
+	 * Allow direct messages from guild members. This setting is applied when a new guild is
+	 * joined. It does not apply retroactively to existing guilds.
+	 */
+	default_guilds_restricted: boolean;
+	detect_platform_accounts: boolean;
+
+	/**
+	 * Exposes context menu items helpful for people writing bots using the API.
+	 */
+	developer_mode: boolean;
+	disable_games_tab: boolean;
+
+	/**
+	 * Allow playback and usage of `/tts` command.
+	 */
+	enable_tts_command: boolean;
+
+	/**
+	 * Automatically scan and delete direct messages received that contain explicit media content.
+	 */
+	explicit_content_filter: ExplicitUserContentFilterLevel;
+	friend_discovery_flags: number;
+
+	/**
+	 * Who can add you as a friend.
+	 */
+	friend_source_flags: FriendSources;
+
+	/**
+	 * Automatically play GIFs when Discord is focused.
+	 */
+	gif_auto_play: boolean;
+	guild_folders: GuildFolder[];
+	guild_positions: Snowflake[];
+
+	/**
+	 * Display images and videos when uploaded directly to Discord. Images larger than 10MB will not
+	 * be previewed.
+	 */
+	inline_attachment_media: boolean;
+
+	/**
+	 * Display images and videos when posted as links to chat.
+	 */
+	inline_embed_media: boolean;
+	locale: string;
+	message_display_compact: boolean;
+	native_phone_integration_enabled: boolean;
+
+	/**
+	 * Show website preview info from links pasted into chat.
+	 */
+	render_embeds: boolean;
+
+	/**
+	 * Show emoji reactions on messages.
+	 */
+	render_reactions: boolean;
+	restricted_guilds: Snowflake[];
+
+	/**
+	 * Display current activity (the game being played if detectable, an activity that supports Rich
+	 * Presence, or a public Stage being attended) as a status message.
+	 */
+	show_current_game: boolean;
+	status: StatusType;
+	stream_notifications_enabled: boolean;
+	theme: 'light' | 'dark';
+	timezone_offset: number;
+
+	/**
+	 * Allow access on NSFW guilds on iOS.
+	 */
+	view_nsfw_guilds: boolean;
+}
+
+export type PushNotificationInactiveTimeout = 60 | 120 | 180 | 240 | 300 | 360 | 420 | 480 | 540 | 600;
+
+export enum AnimateSticker {
+	Always,
+
+	/**
+	 * On the desktop client, stickers will animate on hover or focus. On mobile clients, stickers
+	 * will animate on long-press.
+	 */
+	Interaction,
+	Never
+}
+
+export interface CustomStatus {
+	text: string;
+	expires_at: Nullable<string>;
+	emoji_id: Nullable<Snowflake>;
+	emoji_name: Nullable<string>;
+}
+
+export enum ExplicitUserContentFilterLevel {
+	/**
+	 * Direct messages will not be scanned for explicit content.
+	 */
+	Disabled,
+
+	/**
+	 * Scan direct messages from everyone unless they are a friend.
+	 */
+	FriendsOnly,
+
+	/**
+	 * Scan direct messages from everyone.
+	 */
+	Everyone
+}
+
+export interface FriendSources {
+	all?: boolean;
+	mutual_friends?: boolean;
+	mutual_guilds?: boolean;
+}
+
+export interface GuildFolder {
+	guild_ids: [Snowflake, ...Snowflake[]];
+	id: string | number;
+	name: Nullable<string>;
+	color: Nullable<number>;
 }
