@@ -1,8 +1,9 @@
 import type { Range } from 'extended-utility-types';
-import type { AuditLog, AuditLogEvent, Snowflake } from '../../';
+import type { AuditLog, AuditLogEvent, snowflake } from '../../';
 
 /**
- * Returns an audit log object for the guild. Requires the `VIEW_AUDIT_LOG` permission.
+ * Returns an audit log object for the guild. Requires the `VIEW_AUDIT_LOG`
+ * permission.
  *
  * @endpoint [GET](https://discord.com/developers/docs/resources/audit-log#get-guild-audit-log) `/guilds/{guild.id}/audit-logs`
  */
@@ -11,7 +12,7 @@ export interface GetGuildAuditLog {
 		/**
 		 * Filter the log for actions made by a user.
 		 */
-		user_id?: Snowflake;
+		user_id?: snowflake;
 
 		/**
 		 * The type of audit log event.
@@ -21,7 +22,7 @@ export interface GetGuildAuditLog {
 		/**
 		 * Filter the log before a certain entry ID.
 		 */
-		before?: Snowflake;
+		before?: snowflake;
 
 		/**
 		 * How many entries are returned.

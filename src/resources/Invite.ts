@@ -1,19 +1,14 @@
 import type { Nullable } from 'extended-utility-types';
-import type { PartialApplication, PartialChannel, PartialGuild, PartialGuildMember, User } from '../';
+import type { Application, PartialChannel, PartialGuild, PartialGuildMember, User } from '../';
 
 /**
  * @source {@link https://discord.com/developers/docs/resources/guild#get-guild-vanity-url-example-partial-invite-object|Guild}
  */
-export interface PartialInvite {
+export interface PartialInvite extends Pick<InviteMetadata, 'uses'> {
 	/**
 	 * The invite code (unique ID).
 	 */
-	code: string;
-
-	/**
-	 * Number of times this invite has been used.
-	 */
-	uses: number;
+	code: Nullable<string>;
 }
 
 /**
@@ -21,7 +16,12 @@ export interface PartialInvite {
  *
  * @source {@link https://discord.com/developers/docs/resources/invite#invite-object-invite-structure|Invite}
  */
-export interface Invite extends Pick<PartialInvite, 'code'> {
+export interface Invite {
+	/**
+	 * The invite code (unique ID).
+	 */
+	code: string;
+
 	/**
 	 * The guild this invite is for.
 	 */
@@ -48,31 +48,32 @@ export interface Invite extends Pick<PartialInvite, 'code'> {
 	target_user?: User;
 
 	/**
-	 * The embedded application to open for this voice channel embedded application invite.
+	 * The embedded application to open for this voice channel embedded
+	 * application invite.
 	 */
-	target_application?: PartialApplication;
+	target_application?: Partial<Application>;
 
 	/**
-	 * Approximate count of online members, returned from the `GET /invites/<code>` endpoint when
-	 * `with_counts` is `true`
+	 * Approximate count of online members, returned from the
+	 * `GET /invites/<code>` endpoint when `with_counts` is `true`.
 	 */
 	approximate_presence_count?: number;
 
 	/**
-	 * Approximate count of total members, returned from the `GET /invites/<code>` endpoint when
-	 * `with_counts` is `true`.
+	 * Approximate count of total members, returned from the
+	 * `GET /invites/<code>` endpoint when `with_counts` is `true`.
 	 */
 	approximate_member_count?: number;
 
 	/**
-	 * The expiration date of this invite, returned from the `GET /invites/<code>` endpoint when
-	 * `with_expiration` is `true`.
+	 * The expiration date of this invite, returned from the
+	 * `GET /invites/<code>` endpoint when `with_expiration` is `true`.
 	 */
 	expires_at?: Nullable<string>;
 
 	/**
-	 * Stage instance data if there is a public Stage instance in the Stage channel this invite is
-	 * for.
+	 * Stage instance data if there is a public Stage instance in the Stage
+	 * channel this invite is for.
 	 */
 	stage_instance?: InviteStageInstance;
 }
@@ -90,7 +91,12 @@ export enum InviteTargetType {
  *
  * @source {@link https://discord.com/developers/docs/resources/invite#invite-metadata-object-invite-metadata-structure|Invite}
  */
-export interface InviteMetadata extends Invite, Pick<PartialInvite, 'uses'> {
+export interface InviteMetadata extends Invite {
+	/**
+	 * Number of times this invite has been used.
+	 */
+	uses: number;
+
 	/**
 	 * Max number of times this invite can be used.
 	 */
@@ -127,12 +133,12 @@ export interface InviteStageInstance {
 	participant_count: number;
 
 	/**
-	 * The number os users speaking in the Stage.
+	 * The number of users speaking in the Stage.
 	 */
 	speaker_count: number;
 
 	/**
-	 * The topic of the Stage instance (1-120 characters).
+	 * The topic of the Stage instance (`1-120` characters).
 	 */
 	topic: string;
 }

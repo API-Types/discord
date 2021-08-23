@@ -1,7 +1,8 @@
 import type { DiscoveryCategory } from '../../';
 
 /**
- * Returns an array of discovery category objects that can be used when editing guilds.
+ * Returns an array of discovery category objects that can be used when editing
+ * guilds.
  *
  * @endpoint GET `/discovery/categories`
  */

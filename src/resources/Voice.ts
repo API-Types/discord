@@ -1,28 +1,31 @@
 import type { Nullable } from 'extended-utility-types';
-import type { GuildMember, Snowflake } from '../';
-import type { GuildIdentifiable, Identifiable } from '../__internal__';
+import type { GuildMember, snowflake } from '../';
 
 /**
  * Represents a user's voice connection status.
  *
  * @source {@link https://discord.com/developers/docs/resources/voice#voice-state-object-voice-state-structure|Voice}
  */
-export interface VoiceState extends Partial<GuildIdentifiable> {
+export interface VoiceState {
+	/**
+	 * The guild ID this voice state is for.
+	 */
+	guild_id?: snowflake;
+
 	/**
 	 * The channel ID this user is connected to.
 	 */
-	channel_id: Nullable<Snowflake>;
+	channel_id: Nullable<snowflake>;
 
 	/**
 	 * The user ID this voice state is for.
 	 */
-	user_id: Snowflake;
+	user_id: snowflake;
 
 	/**
-	 * The guild member this voice state is for, or `null` if the user is in a live stage but not
-	 * in the guild.
+	 * The guild member this voice state is for.
 	 */
-	member?: Nullable<GuildMember>;
+	member?: GuildMember;
 
 	/**
 	 * The session ID for this voice state.
@@ -73,7 +76,17 @@ export interface VoiceState extends Partial<GuildIdentifiable> {
 /**
  * @source {@link https://discord.com/developers/docs/resources/voice#voice-region-object-voice-region-structure|Voice}
  */
-export interface VoiceRegion extends Identifiable {
+export interface VoiceRegion {
+	/**
+	 * Unique ID for the region.
+	 */
+	id: string;
+
+	/**
+	 * Name of the region.
+	 */
+	name: string;
+
 	/**
 	 * `true` if this is a VIP-only server.
 	 */

@@ -19,7 +19,7 @@
 			{
 				"code": 120,
 				"tabWidth": 4,
-				"comments": 100,
+				"comments": 80,
 				"ignoreComments": false,
 				"ignoreUrls": true
 			}

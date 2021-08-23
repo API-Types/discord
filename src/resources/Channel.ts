@@ -1,24 +1,30 @@
 import type { Nullable, Range, Tuple } from 'extended-utility-types';
 import type {
 	ActionRow,
+	Application,
+	GatewayReactionEmoji,
 	GuildMember,
 	MessageInteraction,
-	PartialApplication,
-	PartialEmoji,
-	Snowflake,
+	snowflake,
 	StickerItem,
 	User
 } from '../';
-import type { BaseChannel, GuildIdentifiable, Identifiable, PartialTuple, WithType } from '../__internal__';
 
-/**
- * @source {@link https://discord.com/developers/docs/interactions/slash-commands#interaction-object-application-command-interaction-data-resolved-structure|Slash Commands}
- */
-export interface PartialChannel extends Identifiable, WithType<ChannelType> {
+export interface PartialChannel {
+	/**
+	 * The ID of this channel.
+	 */
+	id: snowflake;
+
 	/**
 	 * The name of the channel (`1-100` characters).
 	 */
 	name: string;
+
+	/**
+	 * The type of channel.
+	 */
+	type: ChannelType;
 }
 
 /**
@@ -30,11 +36,334 @@ export type Channel =
 	| TextChannel
 	| DMChannel
 	| VoiceChannel
-	| ChannelCategory
+	| GroupDMChannel
+	| CategoryChannel
 	| NewsChannel
 	| StoreChannel
 	| ThreadChannel
 	| StageChannel;
+
+export interface BaseChannel {
+	/**
+	 * The ID of this channel.
+	 */
+	id: snowflake;
+
+	/**
+	 * The type of channel.
+	 */
+	type: ChannelType;
+
+	/**
+	 * The ID of the guild (may be missing for some channel objects received
+	 * over gateway guild dispatches).
+	 */
+	guild_id?: snowflake;
+
+	/**
+	 * Sorting position of the channel.
+	 */
+	position?: number;
+
+	/**
+	 * Explicit permission overwrites for members and roles.
+	 */
+	permission_overwrites?: Overwrite[];
+
+	/**
+	 * The name of the channel (`1-100` characters).
+	 */
+	name?: string;
+
+	/**
+	 * The channel topic (`0-1024` characters).
+	 */
+	topic?: Nullable<string>;
+
+	/**
+	 * Whether the channel is NSFW.
+	 */
+	nsfw?: boolean;
+
+	/**
+	 * The ID of the last message sent in this channel (may not point to an
+	 * existing or valid message).
+	 */
+	last_message_id?: Nullable<snowflake>;
+
+	/**
+	 * The bitrate (in bits) of the voice or stage channel.
+	 */
+	bitrate?: number;
+
+	/**
+	 * The user limit of the voice or stage channel.
+	 */
+	user_limit?: number;
+
+	/**
+	 * Amount of seconds a user has to wait before sending another message
+	 * (`0-21600`); bots, as well as users with the permission `MANAGE_MESSAGES`
+	 * or `MANAGE_CHANNEL`, are unaffected.
+	 *
+	 * @remarks
+	 * This also applies to thread creation. Users can send one message and
+	 * create one thread during each `rate_limit_per_user` interval.
+	 */
+	rate_limit_per_user?: number;
+
+	/**
+	 * The recipients of the DM.
+	 */
+	recipients?: Partial<Tuple<User, 9>>;
+
+	/**
+	 * Icon hash.
+	 */
+	icon?: Nullable<string>;
+
+	/**
+	 * ID of the creator of the group DM or thread.
+	 */
+	owner_id?: snowflake;
+
+	/**
+	 * Application ID of the group DM creator if it is bot-created.
+	 */
+	application_id?: snowflake;
+
+	/**
+	 * For guild channels: ID of the parent category for a channel (each parent
+	 * category can contain up to `50` channels). For threads: ID of the text
+	 * channel this thread was created in.
+	 */
+	parent_id?: Nullable<snowflake>;
+
+	/**
+	 * When the last pinned message was pinned. This may be `null` in events
+	 * such as `GUILD_CREATE` when a message is not pinned.
+	 */
+	last_pin_timestamp?: Nullable<string>;
+
+	/**
+	 * Voice region ID for the voice or stage channel. Automatic when set to
+	 * `null`.
+	 */
+	rtc_region?: Nullable<string>;
+
+	/**
+	 * The camera video quality mode of the voice or stage channel. `1` when
+	 * not present.
+	 */
+	video_quality_mode?: VideoQualityMode;
+
+	/**
+	 * An approximate count of messages in a thread. Stops counting at `50`.
+	 */
+	message_count?: Range<0, 50>;
+
+	/**
+	 * An approximate count of users in a thread. Stops counting at `50`.
+	 */
+	member_count?: Range<0, 50>;
+
+	/**
+	 * Thread-specific fields not needed by other channels.
+	 */
+	thread_metadata?: ThreadMetadata;
+
+	/**
+	 * Thread member object for the current user, if they have joined the
+	 * thread. Only included for certain API endpoints.
+	 */
+	member?: ThreadMember;
+
+	/**
+	 * Default duration for newly created threads, in minutes, to automatically
+	 * archive the thread after recent activity.
+	 */
+	default_auto_archive_duration?: AutoArchiveDuration;
+
+	/**
+	 * Computed permissions for the invoking user in the channel, including
+	 * overwrites. Only included when part of the `resolved` data received on a
+	 * slash command interaction.
+	 */
+	permissions?: string;
+}
+
+/**
+ * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-guild-text-channel|Channel}
+ */
+export interface TextChannel
+	extends Required<
+			Pick<
+				BaseChannel,
+				| 'id'
+				| 'position'
+				| 'permission_overwrites'
+				| 'name'
+				| 'topic'
+				| 'nsfw'
+				| 'last_message_id'
+				| 'rate_limit_per_user'
+				| 'last_pin_timestamp'
+				| 'default_auto_archive_duration'
+			>
+		>,
+		Pick<BaseChannel, 'guild_id'> {
+	/**
+	 * `0` for Text Channels.
+	 */
+	readonly type: ChannelType.GuildText;
+
+	/**
+	 * ID of the parent category for a channel (each parent category can contain
+	 * up to `50` channels).
+	 */
+	parent_id: Nullable<snowflake>;
+}
+
+/**
+ * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-dm-channel|Channel}
+ */
+export interface DMChannel extends Required<Pick<BaseChannel, 'id' | 'last_message_id' | 'last_pin_timestamp'>> {
+	/**
+	 * `1` for DM Channels.
+	 */
+	readonly type: ChannelType.DM;
+
+	/**
+	 * The recipient of the DM.
+	 */
+	recipients: [User];
+}
+
+/**
+ * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-guild-voice-channel|Channel}
+ */
+export interface VoiceChannel
+	extends Required<
+			Pick<
+				BaseChannel,
+				'id' | 'position' | 'permission_overwrites' | 'name' | 'nsfw' | 'bitrate' | 'user_limit' | 'rtc_region'
+			>
+		>,
+		Pick<BaseChannel, 'guild_id' | 'video_quality_mode'> {
+	/**
+	 * `2` for Voice Channels.
+	 */
+	readonly type: ChannelType.GuildVoice;
+
+	/**
+	 * ID of the parent category for a channel (each parent category can contain
+	 * up to `50` channels).
+	 */
+	parent_id: Nullable<snowflake>;
+}
+
+/**
+ * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-group-dm-channel|Channel}
+ */
+export interface GroupDMChannel
+	extends Required<
+		Pick<BaseChannel, 'id' | 'name' | 'last_message_id' | 'recipients' | 'icon' | 'last_pin_timestamp'>
+	> {
+	/**
+	 * `3` for Group DM Channels.
+	 */
+	readonly type: ChannelType.GroupDM;
+
+	/**
+	 * ID of the creator of the group DM.
+	 */
+	owner_id: snowflake;
+}
+
+/**
+ * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-channel-category|Channel}
+ */
+export interface CategoryChannel
+	extends Required<Pick<BaseChannel, 'id' | 'position' | 'permission_overwrites' | 'name' | 'nsfw'>> {
+	/**
+	 * `4` for Category Channels.
+	 */
+	readonly type: ChannelType.GuildCategory;
+	readonly parent_id: null;
+}
+
+/**
+ * Bots can post or publish messages in this type of channel if they have the
+ * proper permissions. These are called "Announcement Channels" in the client.
+ *
+ * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-guild-news-channel|Channel}
+ */
+export interface NewsChannel extends Omit<TextChannel, 'type' | 'rate_limit_per_user'> {
+	/**
+	 * `5` for News Channels.
+	 */
+	readonly type: ChannelType.GuildNews;
+}
+
+/**
+ * Bots can neither send or read messages from this channel type (as it is a
+ * store page).
+ *
+ * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-store-channel|Channel}
+ */
+export interface StoreChannel extends Omit<CategoryChannel, 'type' | 'parent_id'> {
+	/**
+	 * `6` for Store Channels.
+	 */
+	readonly type: ChannelType.GuildStore;
+
+	/**
+	 * ID of the parent category for a channel (each parent category can contain
+	 * up to `50` channels).
+	 */
+	parent_id: Nullable<snowflake>;
+}
+
+/**
+ * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-thread-channel|Channel}
+ */
+export interface ThreadChannel
+	extends Required<
+			Pick<
+				BaseChannel,
+				| 'id'
+				| 'name'
+				| 'last_message_id'
+				| 'rate_limit_per_user'
+				| 'last_pin_timestamp'
+				| 'message_count'
+				| 'member_count'
+				| 'thread_metadata'
+			>
+		>,
+		Pick<BaseChannel, 'guild_id' | 'member'> {
+	/**
+	 * `10`, `11`, or `12` for Thread Channels.
+	 */
+	readonly type: ChannelType.GuildNewsThread | ChannelType.GuildPublicThread | ChannelType.GuildPrivateThread;
+
+	/**
+	 * ID of the creator of the thread.
+	 */
+	owner_id: snowflake;
+
+	/**
+	 * ID of the text channel this thread was created in.
+	 */
+	parent_id: snowflake;
+}
+
+export interface StageChannel extends Omit<VoiceChannel, 'type' | 'video_quality_mode'> {
+	/**
+	 * `13` for Stage Channels.
+	 */
+	readonly type: ChannelType.GuildStageVoice;
+}
 
 /**
  * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-channel-types|Channel}
@@ -86,8 +415,9 @@ export enum ChannelType {
 	GuildPublicThread,
 
 	/**
-	 * A temporary sub-channel within a `GUILD_TEXT` channel that is only viewable by those invited
-	 * and those with the `MANAGE_MESSAGES` permission.
+	 * A temporary sub-channel within a `GUILD_TEXT` channel that is only
+	 * viewable by those invited and those with the `MANAGE_THREADS`
+	 * permission.
 	 */
 	GuildPrivateThread,
 
@@ -114,187 +444,36 @@ export enum VideoQualityMode {
 }
 
 /**
- * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-guild-text-|Channel}
- */
-export interface TextChannel extends BaseChannel, WithType<ChannelType.GuildText> {
-	/**
-	 * The channel topic (`0-1024` characters).
-	 */
-	topic: string;
-
-	/**
-	 * The ID of the last message sent in this channel (may not point to an existing or valid
-	 * message).
-	 */
-	last_message_id: Snowflake;
-
-	/**
-	 * Amount of seconds a user has to wait before sending another message (`0-21600`); bots, as
-	 * well as users with the permission `manage_messages` or `manage_channel`, are unaffected.
-	 *
-	 * This also applies to thread creation. Users can send one message and create one thread
-	 * during each `rate_limit_per_user` interval.
-	 */
-	rate_limit_per_user: number;
-
-	/**
-	 * Default duration for newly created threads, in minutes, to automatically archive the thread
-	 * after recent activity.
-	 */
-	default_auto_archive_duration: AutoArchiveDuration;
-}
-
-/**
- * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-dm-channel|Channel}
- */
-export interface DMChannel
-	extends Identifiable,
-		WithType<ChannelType.DM>,
-		Pick<TextChannel, 'last_message_id' | 'last_pin_timestamp'> {
-	/**
-	 * The recipient of the DM.
-	 */
-	recipients: [User];
-}
-
-/**
- * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-guild-voice-channel|Channel}
- */
-export interface VoiceChannel extends WithType<ChannelType.GuildVoice>, Omit<BaseChannel, 'last_pin_timestamp'> {
-	bitrate: number;
-	user_limit: number;
-
-	/**
-	 * Voice region ID for the voice channel, automatic when set to `null`.
-	 */
-	rtc_region: Nullable<string>;
-
-	/**
-	 * The camera video quality mode of the voice channel, `1` when not present.
-	 */
-	video_quality_mode?: VideoQualityMode;
-}
-
-/**
- * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-group-dm-channel|Channel}
- */
-export interface GroupDMChannel extends Omit<DMChannel, 'recipients'>, Pick<BaseChannel, 'name'> {
-	/**
-	 * The recipients of the DM.
-	 */
-	recipients: PartialTuple<User, 8, 2>;
-
-	/**
-	 * Icon hash.
-	 */
-	icon: Nullable<string>;
-
-	/**
-	 * ID of the creator of the group DM.
-	 */
-	owner_id: Snowflake;
-}
-
-/**
- * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-channel-category|Channel}
- */
-export type ChannelCategory = WithType<ChannelType.GuildCategory> &
-	Omit<BaseChannel, 'last_pin_timestamp'> &
-	Nullable<Pick<BaseChannel, 'parent_id'>>;
-
-/**
- * Bots can post or publish messages in this type of channel if they have the proper permissions.
- *
- * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-guild-news-channel|Channel}
- */
-export type NewsChannel = WithType<ChannelType.GuildNews> & Omit<Text, 'type' | 'rate_limit_per_user'>;
-
-/**
- * Bots can neither send or read messages from this channel type (as it is a store page).
- *
- * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-store-channel|Channel}
- */
-export type StoreChannel = WithType<ChannelType.GuildStore> & Omit<NewsChannel, 'type'>;
-
-/**
- * Threads can be either `archived` or `active`. Archived threads are generally immutable. To send a
- * message or add a reaction, a thread must first be unarchived. The API will helpfully
- * automatically unarchive a thread when sending a message in that thread.
- *
- * Unlike with channels, the API will only sync updates to users about threads the current user can
- * view. When receiving a guild create payload, the API will only include active threads the current
- * user can view. Threads inside of private channels are completely private to the members of that
- * private channel. As such, when *gaining* access to a channel the API sends a thread list sync,
- * which includes all active threads in that channel.
- *
- * Threads also track membership. Users must be added to a thread before sending messages in them.
- * The API will helpfully automatically add users to a thread when sending a message in that thread.
- *
- * Guilds have limits on the number of active threads and members per thread. Once these are
- * reached additional threads cannot be created or unarchived, and users cannot be added.
- *
- * @source {@link https://discord.com/developers/docs/resources/channel#channel-object-example-thread-channel|Channel}
- */
-export interface ThreadChannel
-	extends WithType<ChannelType.GuildNewsThread | ChannelType.GuildPublicThread | ChannelType.GuildPrivateThread>,
-		Pick<
-			TextChannel,
-			'id' | 'guild_id' | 'name' | 'last_message_id' | 'rate_limit_per_user' | 'last_pin_timestamp'
-		> {
-	/**
-	 * ID of the creator of the thread.
-	 */
-	owner_id: Snowflake;
-
-	/**
-	 * ID of the text channel this thread was created in.
-	 */
-	parent_id: Snowflake;
-
-	/**
-	 * An approximate count of messages in a thread.
-	 */
-	message_count: Range<0, 50>;
-
-	/**
-	 * An approximate count of users in a thread.
-	 */
-	member_count: Range<0, 50>;
-
-	/**
-	 * Thread-specific fields not needed by other channels.
-	 */
-	thread_metadata: ThreadMetadata;
-
-	/**
-	 * Thread member object for the current user, if they have joined the thread, only included
-	 * on certain API endpoints.
-	 */
-	member?: ThreadMember;
-}
-
-export type StageChannel = WithType<ChannelType.GuildStageVoice> & Omit<VoiceChannel, 'type' | 'video_quality_mode'>;
-
-/**
  * Represents a message sent in a channel within Discord.
  *
  * @source {@link https://discord.com/developers/docs/resources/channel#message-object-message-structure|Channel}
  */
-export interface Message extends Identifiable, WithType<MessageType>, Partial<GuildIdentifiable> {
+export interface Message {
+	/**
+	 * ID of the message.
+	 */
+	id: snowflake;
+
 	/**
 	 * ID of the channel the message was sent in.
 	 */
-	channel_id: Snowflake;
+	channel_id: snowflake;
+
+	/**
+	 * ID of the guild the message was sent in.
+	 */
+	guild_id?: snowflake;
 
 	/**
 	 * The author of this message (not guaranteed to be a valid user).
 	 *
 	 * @remarks
-	 * The author object follows the structure of the user object, but is only a valid user in the
-	 * case where the message is generated by a user or bot user. If the message is generated by a
-	 * webhook, the author object corresponds to the webhook's ID, username, and avatar. You can
-	 * tell if a message is generated by a webhook by checking for the `webhook_id` on the message
-	 * object.
+	 * The author object follows the structure of the user object, but is only
+	 * a valid user in the case where the message is generated by a user or bot
+	 * user. If the message is generated by a webhook, the author object
+	 * corresponds to the webhook's ID, username, and avatar. You can tell if a
+	 * message is generated by a webhook by checking for the `webhook_id` on
+	 * the message object.
 	 */
 	author: User;
 
@@ -302,12 +481,16 @@ export interface Message extends Identifiable, WithType<MessageType>, Partial<Gu
 	 * Member properties for this message's author.
 	 *
 	 * @remarks
-	 * The member object exists in `MESSAGE_CREATE` and `MESSAGE_UPDATE` events from
-	 * text-based guild channels, provided that the author off the message is not a webhook.
-	 * This allows bots to obtain real-time member data without requiring bots to store member
-	 * state in memory.
+	 * The member object exists in `MESSAGE_CREATE` and `MESSAGE_UPDATE` events
+	 * from text-based guild channels, provided that the author of the message
+	 * is not a webhook. This allows bots to obtain real-time member data
+	 * without requiring bots to store member state in memory.
 	 */
 	member?: GuildMember;
+
+	/**
+	 * Contents of the message.
+	 */
 	content: string;
 
 	/**
@@ -334,40 +517,63 @@ export interface Message extends Identifiable, WithType<MessageType>, Partial<Gu
 	 * Users specifically mentioned in the message.
 	 *
 	 * @remarks
-	 * The user objects in the mentions array will only have the partial `member` field present in
-	 * `MESSAGE_CREATE` and `MESSAGE_UPDATE` events from text-based guild channels.
+	 * The user objects in the mentions array will only have the partial
+	 * `member` field present in `MESSAGE_CREATE` and `MESSAGE_UPDATE` events
+	 * from text-based guild channels.
 	 */
 	mentions: UserMention[];
 
 	/**
 	 * Roles specifically mentioned in this message.
 	 */
-	mention_roles: Snowflake[];
+	mention_roles: snowflake[];
 
 	/**
 	 * Channels specifically mentioned in this message.
 	 *
 	 * @remarks
-	 * Not all channel mentions will appear in `mention_channels`. Only textual channels that are
-	 * visible to everyone in a lurkable guild will ever be included. Only crossposted messages
-	 * (via Channel Following) current include `mention_channels`. If no mentions in the message
-	 * meet these requirements, this field will not be sent.
+	 * Not all channel mentions will appear in `mention_channels`. Only textual
+	 * channels that are visible to everyone in a lurkable guild will ever be
+	 * included. Only crossposted messages (via Channel Following) current
+	 * include `mention_channels`. If no mentions in the message meet these
+	 * requirements, this field will not be sent.
 	 */
 	mention_channels?: ChannelMention[];
+
+	/**
+	 * Any attached files.
+	 */
 	attachments: Attachment[];
+
+	/**
+	 * Any embedded content.
+	 */
 	embeds: Partial<Tuple<Embed, 10>>;
+
+	/**
+	 * Reactions to the message.
+	 */
 	reactions?: Partial<Tuple<Reaction, 20>>;
 
 	/**
 	 * Used for validating a message was sent.
 	 */
 	nonce?: number | string;
+
+	/**
+	 * Whether this message is pinned.
+	 */
 	pinned: boolean;
 
 	/**
 	 * If the message is generated by a webhook, this is the webhook's ID.
 	 */
-	webhook_id?: Snowflake;
+	webhook_id?: snowflake;
+
+	/**
+	 * Type of message.
+	 */
+	type: MessageType;
 
 	/**
 	 * Sent with Rich Presence-related chat embeds.
@@ -377,16 +583,17 @@ export interface Message extends Identifiable, WithType<MessageType>, Partial<Gu
 	/**
 	 * Sent with Rich Presence-related chat embeds.
 	 */
-	application?: PartialApplication;
+	application?: Partial<Application>;
 
 	/**
-	 * If the message is a response to an Interaction, this is the ID of the interaction's
-	 * application.
+	 * If the message is a response to an Interaction, this is the ID of the
+	 * interaction's application.
 	 */
-	application_id?: Snowflake;
+	application_id?: snowflake;
 
 	/**
-	 * Data showing the source of a crosspost, channel follow add, pin, or reply message.
+	 * Data showing the source of a crosspost, channel follow add, pin, or reply
+	 * message.
 	 */
 	message_reference?: MessageReference;
 
@@ -399,10 +606,11 @@ export interface Message extends Identifiable, WithType<MessageType>, Partial<Gu
 	 * The message associated with the `message_reference`.
 	 *
 	 * @remarks
-	 * This field is only returned for messages with a `type` of `19` (`REPLY`) or `21`
-	 * (`THREAD_STARTER_MESSAGE`). If the message is a reply but the `referenced_message` field is
-	 * not present, the backend did not attempt to fetch the message that was being replied to, so
-	 * its state is unknown. If the field exists but is `null`, the referenced message was deleted.
+	 * This field is only returned for messages with a `type` of `19` (`REPLY`)
+	 * or `21` (`THREAD_STARTER_MESSAGE`). If the message is a reply but the
+	 * `referenced_message` field is not present, the backend did not attempt
+	 * to fetch the message that was being replied to, so its state is unknown.
+	 * If the field exists but is `null`, the referenced message was deleted.
 	 */
 	referenced_message?: Nullable<Message>;
 
@@ -412,14 +620,15 @@ export interface Message extends Identifiable, WithType<MessageType>, Partial<Gu
 	interaction?: MessageInteraction;
 
 	/**
-	 * The thread that was started from this message, includes thread member object.
+	 * The thread that was started from this message, includes thread member
+	 * object.
 	 */
 	thread?: ThreadChannel & Required<Pick<ThreadChannel, 'member'>>;
 
 	/**
 	 * Sent if the message contains components.
 	 */
-	components?: PartialTuple<ActionRow, 4>;
+	components?: Partial<Tuple<ActionRow, 5>>;
 
 	/**
 	 * Sent if the message contains stickers.
@@ -428,7 +637,7 @@ export interface Message extends Identifiable, WithType<MessageType>, Partial<Gu
 }
 
 export interface UserMention extends User {
-	member?: Partial<Omit<GuildMember, 'user'>>;
+	member?: Omit<GuildMember, 'user'>;
 }
 
 /**
@@ -455,15 +664,21 @@ export enum MessageType {
 	GuildDiscoveryGracePeriodFinalWarning,
 	ThreadCreated,
 	Reply,
-	ApplicationCommand,
+	ChatInputCommand,
 	ThreadStarterMessage,
-	GuildInviteReminder
+	GuildInviteReminder,
+	ContextMenuCommand
 }
 
 /**
  * @source {@link https://discord.com/developers/docs/resources/channel#message-object-message-activity-structure|Channel}
  */
-export interface MessageActivity extends WithType<MessageActivityType> {
+export interface MessageActivity {
+	/**
+	 * Type of message activity.
+	 */
+	type: MessageActivityType;
+
 	/**
 	 * `party_id` from a Rich Presence event.
 	 */
@@ -485,12 +700,14 @@ export enum MessageActivityType {
  */
 export enum MessageFlags {
 	/**
-	 * This message has been published to subscribed channels (via Channel Following).
+	 * This message has been published to subscribed channels (via Channel
+	 * Following).
 	 */
 	Crossposted = 1 << 0,
 
 	/**
-	 * This message originated from a message in another channel (via Channel Following).
+	 * This message originated from a message in another channel (via Channel
+	 * Following).
 	 */
 	IsCrosspost = 1 << 1,
 
@@ -500,7 +717,8 @@ export enum MessageFlags {
 	SuppressEmbeds = 1 << 2,
 
 	/**
-	 * The source message for this crosspost has been deleted (via Channel Following).
+	 * The source message for this crosspost has been deleted (via Channel
+	 * Following).
 	 */
 	SourceDeleted = 1 << 3,
 
@@ -528,24 +746,29 @@ export enum MessageFlags {
 /**
  * @source {@link https://discord.com/developers/docs/resources/channel#message-object-message-reference-structure|Channel}
  */
-export interface MessageReference extends Partial<GuildIdentifiable> {
+export interface MessageReference {
 	/**
 	 * ID of the originating message.
 	 */
-	message_id?: Snowflake;
+	message_id?: snowflake;
 
 	/**
 	 * ID of the originating message's channel.
 	 *
 	 * @remarks
-	 * `channel_id` is optional when creating a reply, but will always be present when receiving an
-	 * event/response that includes this data model.
+	 * `channel_id` is optional when creating a reply, but will always be
+	 * present when receiving an event/response that includes this data model.
 	 */
-	channel_id?: Snowflake;
+	channel_id?: snowflake;
 
 	/**
-	 * When sending, whether to error if the referenced message doesn't exist instead of sending as
-	 * a normal (non-reply) message.
+	 * ID of the originating message's guild.
+	 */
+	guild_id?: snowflake;
+
+	/**
+	 * When sending, whether to error if the referenced message doesn't exist
+	 * instead of sending as a normal (non-reply) message.
 	 *
 	 * @defaultValue `true`
 	 */
@@ -559,12 +782,12 @@ export interface FollowedChannel {
 	/**
 	 * Source channel ID.
 	 */
-	channel_id: Snowflake;
+	channel_id: snowflake;
 
 	/**
 	 * Created target webhook ID.
 	 */
-	webhook_id: Snowflake;
+	webhook_id: snowflake;
 }
 
 /**
@@ -584,7 +807,7 @@ export interface Reaction {
 	/**
 	 * Emoji information.
 	 */
-	emoji: PartialEmoji;
+	emoji: GatewayReactionEmoji;
 }
 
 /**
@@ -594,12 +817,12 @@ export interface Overwrite {
 	/**
 	 * Role or user ID.
 	 */
-	id: Snowflake;
+	id: snowflake;
 
 	/**
 	 * Either `0` (role) or `1` (member).
 	 */
-	type: 0 | 1;
+	type: OverwriteType;
 
 	/**
 	 * Permission bit set.
@@ -612,9 +835,16 @@ export interface Overwrite {
 	deny: string;
 }
 
+export enum OverwriteType {
+	Role,
+	Member
+}
+
 /**
- * The thread metadata object contains a number of thread-specific channel fields that are not
- * needed by other channel types.
+ * The thread metadata object contains a number of thread-specific channel
+ * fields that are not needed by other channel types.
+ *
+ * @source {@link https://discord.com/developers/docs/resources/channel#thread-metadata-object-thread-metadata-structure|Channel}
  */
 export interface ThreadMetadata {
 	/**
@@ -623,41 +853,56 @@ export interface ThreadMetadata {
 	archived: boolean;
 
 	/**
-	 * Duration in minutes to automatically archive the thread after recent activity.
+	 * Duration in minutes to automatically archive the thread after recent
+	 * activity.
 	 */
 	auto_archive_duration: AutoArchiveDuration;
 
 	/**
-	 * Timestamp when the thread's archive status was last changed, used for calculating recent
-	 * activity.
+	 * Timestamp when the thread's archive status was last changed, used for
+	 * calculating recent activity.
 	 */
 	archive_timestamp: string;
 
 	/**
-	 * When a thread is locked, only users with `MANAGE_THREADS` can unarchive it.
+	 * When a thread is locked, only users with `MANAGE_THREADS` can unarchive
+	 * it.
 	 */
-	locked?: boolean;
+	locked: boolean;
+
+	/**
+	 * Whether non-moderators can add other non-moderators to a thread. Only
+	 * available on private threads.
+	 */
+	invitable?: boolean;
 }
 
 export type AutoArchiveDuration = 60 | 1440 | 4320 | 10080;
 
 /**
- * A thread member is used to indicate whether a user has joined a thread or not.
+ * A thread member is used to indicate whether a user has joined a thread or
+ * not.
  *
  * @source {@link https://discord.com/developers/docs/resources/channel#thread-member-object-thread-member-structure|Channel}
  */
 export interface ThreadMember {
 	/**
+	 * The ID of the thread.
+	 *
 	 * @remarks
-	 * This field is omitted on the member sent within each thread in the `GUILD_CREATE` event.
+	 * This field is omitted on the member sent within each thread in the
+	 * `GUILD_CREATE` event.
 	 */
-	readonly id: Snowflake;
+	id?: snowflake;
 
 	/**
+	 * The ID of the user.
+	 *
 	 * @remarks
-	 * This field is omitted on the member sent within each thread in the `GUILD_CREATE` event.
+	 * This field is omitted on the member sent within each thread in the
+	 * `GUILD_CREATE` event.
 	 */
-	user_id: Snowflake;
+	user_id?: snowflake;
 
 	/**
 	 * The time the current user last joined the thread.
@@ -671,8 +916,19 @@ export interface ThreadMember {
 }
 
 export interface PartialEmbed {
+	/**
+	 * Title of embed.
+	 */
 	title?: string;
+
+	/**
+	 * Description of embed.
+	 */
 	description?: string;
+
+	/**
+	 * URL of embed.
+	 */
 	url?: string;
 
 	/**
@@ -708,7 +964,7 @@ export interface PartialEmbed {
 	/**
 	 * Fields information.
 	 */
-	fields?: PartialTuple<EmbedField, 24>;
+	fields?: Partial<Tuple<EmbedField, 25>>;
 }
 
 /**
@@ -716,7 +972,7 @@ export interface PartialEmbed {
  */
 export interface Embed extends Omit<PartialEmbed, 'image' | 'thumbnail'> {
 	/**
-	 * Type of embed (always `rich` for webhook embeds).
+	 * Type of embed (always `'rich'` for webhook embeds).
 	 */
 	type?: EmbedType;
 
@@ -742,8 +998,8 @@ export interface Embed extends Omit<PartialEmbed, 'image' | 'thumbnail'> {
 }
 
 /**
- * Embed types are "loosely defined" and, for the most part, are not used by the clients for
- * rendering. Embed attributes power what is rendered.
+ * Embed types are "loosely defined" and, for the most part, are not used by
+ * the clients for rendering. Embed attributes power what is rendered.
  *
  * @source {@link https://discord.com/developers/docs/resources/channel#embed-object-embed-types|Channel}
  */
@@ -752,14 +1008,30 @@ export enum EmbedType {
 	 * Generic embed rendered from embed attributes.
 	 */
 	Rich = 'rich',
+
+	/**
+	 * Image embed.
+	 */
 	Image = 'image',
+
+	/**
+	 * Video embed.
+	 */
 	Video = 'video',
 
 	/**
 	 * Animated GIF image embed rendered as a video embed.
 	 */
 	GIFV = 'gifv',
+
+	/**
+	 * Article embed.
+	 */
 	Article = 'article',
+
+	/**
+	 * Link embed.
+	 */
 	Link = 'link'
 }
 
@@ -768,7 +1040,8 @@ export enum EmbedType {
  */
 export interface EmbedThumbnail {
 	/**
-	 * Source URL of thumbnail or image (only supports http[s] and attachments), or video.
+	 * Source URL of thumbnail or image (only supports http[s] and attachments),
+	 * or video.
 	 */
 	url?: string;
 
@@ -861,7 +1134,12 @@ export interface EmbedField {
 /**
  * @source {@link https://discord.com/developers/docs/resources/channel#attachment-object-attachment-structure|Channel}
  */
-export interface Attachment extends Identifiable {
+export interface Attachment {
+	/**
+	 * Attachment ID.
+	 */
+	id: snowflake;
+
 	/**
 	 * Name of file attached.
 	 */
@@ -901,17 +1179,53 @@ export interface Attachment extends Identifiable {
 /**
  * @source {@link https://discord.com/developers/docs/resources/channel#channel-mention-object-channel-mention-structure|Channel}
  */
-export type ChannelMention = Identifiable & GuildIdentifiable & WithType<ChannelType> & Pick<PartialChannel, 'name'>;
+export interface ChannelMention {
+	/**
+	 * ID of the channel.
+	 */
+	id: snowflake;
+
+	/**
+	 * ID of the guild containing the channel.
+	 */
+	guild_id: snowflake;
+
+	/**
+	 * The type of channel.
+	 */
+	type: ChannelType;
+
+	/**
+	 * The name of the channel.
+	 */
+	name: string;
+}
 
 /**
  * @source {@link https://discord.com/developers/docs/resources/channel#allowed-mentions-object-allowed-mention-types|Channel}
  */
-export type AllowedMentionsType = 'roles' | 'users' | 'everyone';
+export enum AllowedMentionsType {
+	/**
+	 * Controls role mentions.
+	 */
+	RoleMentions = 'roles',
+
+	/**
+	 * Controls user mentions.
+	 */
+	UserMentions = 'users',
+
+	/**
+	 * Controls `@everyone` and `@here` mentions.
+	 */
+	EveryoneMentions = 'everyone'
+}
 
 /**
- * The allowed mention field allows for more granular control over mentions without various hacks
- * to the message content. This will always validate against message content to avoid phantom pings,
- * and check against user/bot permissions.
+ * The allowed mention field allows for more granular control over mentions
+ * without various hacks to the message content. This will always validate
+ * against message content to avoid phantom pings and check against user/bot
+ * permissions.
  *
  * @source {@link https://discord.com/developers/docs/resources/channel#allowed-mentions-object-allowed-mentions-structure|Channel}
  */
@@ -919,20 +1233,21 @@ export interface AllowedMentions {
 	/**
 	 * An array of allowed mention types to parse from the content.
 	 */
-	parse: AllowedMentionsType[];
+	parse?: AllowedMentionsType[];
 
 	/**
-	 * Array of `role_id`s to mention.
+	 * Array of `role_id`s to mention (max size of `100`).
 	 */
-	roles?: PartialTuple<Snowflake, 99>;
+	roles?: Partial<Tuple<snowflake, 100>>;
 
 	/**
-	 * Array of `user_id`s to mention.
+	 * Array of `user_id`s to mention (max size of `100`).
 	 */
-	users?: PartialTuple<Snowflake, 99>;
+	users?: Partial<Tuple<snowflake, 100>>;
 
 	/**
-	 * For replies, whether to mention the author of the message being replied to.
+	 * For replies, whether to mention the author of the message being replied
+	 * to.
 	 *
 	 * @defaultValue `false`
 	 */
@@ -940,24 +1255,53 @@ export interface AllowedMentions {
 }
 
 /**
- * To facilitate showing rich content, rich embeds do not follow the traditional limits of message
- * content. However, some limits are still in place to prevent excessively large embeds.
+ * To facilitate showing rich content, rich embeds do not follow the traditional
+ * limits of message content. However, some limits are still in place to prevent
+ * excessively large embeds.
  *
- * All of the limits are measured inclusively. Leading and trailing whitespace characters are not
- * included (they are trimmed automatically).
+ * All of the limits are measured inclusively. Leading and trailing whitespace
+ * characters are not included (they are trimmed automatically).
  *
- * Additionally, the characters in all `title`, `description`, `field.name`, `field.value`,
- * `footer.text`, and `author.name` fields must not exceed `6000` characters in total. Violating
- * any of these constraints will result in a `Bad Request` response.
+ * Additionally, the characters in all `title`, `description`, `field.name`,
+ * `field.value`, `footer.text`, and `author.name` fields must not exceed `6000`
+ * characters in total. Violating any of these constraints will result in a
+ * `Bad Request` response.
  *
  * @source {@link https://discord.com/developers/docs/resources/channel#embed-limits-limits|Channel}
  */
 export enum EmbedLimit {
+	/**
+	 * `256` characters.
+	 */
 	Title = 256,
+
+	/**
+	 * `4096` characters.
+	 */
 	Description = 4096,
+
+	/**
+	 * Up to `25` field objects.
+	 */
 	Fields = 25,
+
+	/**
+	 * `256` characters.
+	 */
 	FieldName = 256,
+
+	/**
+	 * `1024` characters
+	 */
 	FieldValue = 1024,
+
+	/**
+	 * `2048` characters.
+	 */
 	Footer = 2048,
+
+	/**
+	 * `256` characters.
+	 */
 	Author = 256
 }

@@ -7,21 +7,24 @@ import type {
 	PartialUser,
 	PresenceUpdate,
 	Role,
-	Snowflake,
+	snowflake,
 	StageInstance,
 	StatusType,
 	ThreadChannel,
 	User,
 	VoiceState
 } from '../';
-import type { Identifiable, WithType } from '../__internal__';
+import { TextChannel } from './';
 
-/**
- * @source {@link https://discord.com/developers/docs/resources/user#get-current-user-guilds-example-partial-guild|User}
- */
-export interface PartialGuild extends Identifiable {
+export interface PartialGuild {
 	/**
-	 * Guild name (`2-100` characters, excluding trailing and leading whitespace).
+	 * Guild ID.
+	 */
+	id: snowflake;
+
+	/**
+	 * Guild name (`2-100` characters, excluding trailing and leading
+	 * whitespace).
 	 */
 	name: Nullable<string>;
 
@@ -49,6 +52,10 @@ export interface PartialGuild extends Identifiable {
 	 * Verification level required for the guild.
 	 */
 	verification_level?: VerificationLevel;
+
+	/**
+	 * The vanity URL code for the guild.
+	 */
 	vanity_url_code?: Nullable<string>;
 
 	/**
@@ -58,8 +65,8 @@ export interface PartialGuild extends Identifiable {
 }
 
 /**
- * Represents an isolated collection of users and channels, and are often referred to as "servers"
- * in the UI.
+ * Represents an isolated collection of users and channels, and are often
+ * referred to as "servers" in the UI.
  *
  * @source {@link https://discord.com/developers/docs/resources/guild#guild-object-guild-structure|Guild}
  */
@@ -67,15 +74,16 @@ export interface Guild extends PartialGuild {
 	/**
 	 * Icon hash.
 	 */
-	icon: string;
+	icon: Nullable<string>;
 
 	/**
-	 * Icon hash, returned when in the template object.
+	 * Icon hash. Returned when in the template object.
 	 */
 	icon_hash?: Nullable<string>;
 
 	/**
-	 * Discovery splash hash; only present for guilds with the `DISCOVERABLE` feature.
+	 * Discovery splash hash. Only present for guilds with the `DISCOVERABLE`
+	 * feature.
 	 */
 	discovery_splash: Nullable<string>;
 
@@ -83,21 +91,29 @@ export interface Guild extends PartialGuild {
 	 * `true` if the user is the owner of the guild.
 	 *
 	 * @remarks
-	 * This field is only sent when using the `GET Current User Guilds` endpoint and is
-	 * relative to the request user.
+	 * This field is only sent when using the `GET Current User Guilds` endpoint
+	 * and is relative to the request user.
 	 */
 	owner?: boolean;
-	owner_id: Snowflake;
+
+	/**
+	 * ID of owner.
+	 */
+	owner_id: snowflake;
 
 	/**
 	 * Total permissions for the user in the guild (excludes overwrites).
 	 *
 	 * @remarks
-	 * This field is only sent when using the `GET Current User Guilds` endpoint and is
-	 * relative to the request user.
+	 * This field is only sent when using the `GET Current User Guilds` endpoint
+	 * and is relative to the request user.
 	 */
 	permissions?: string;
-	afk_channel_id: Nullable<Snowflake>;
+
+	/**
+	 * ID of AFK channel.
+	 */
+	afk_channel_id: Nullable<snowflake>;
 
 	/**
 	 * AFK timeout in seconds.
@@ -110,39 +126,71 @@ export interface Guild extends PartialGuild {
 	wdiget_enabled?: boolean;
 
 	/**
-	 * The channel ID that the widget will generate an invite to, or `null` if set to no invite.
+	 * The channel ID that the widget will generate an invite to, or `null` if
+	 * set to no invite.
 	 */
-	widget_channel_id?: Nullable<Snowflake>;
+	widget_channel_id?: Nullable<snowflake>;
+
+	/**
+	 * Verification level required for the guild.
+	 */
 	verification_level: VerificationLevel;
+
+	/**
+	 * Default message notifications level.
+	 */
 	default_message_notifications: DefaultMessageNotificationLevel;
+
+	/**
+	 * Explicit content filter level.
+	 */
 	explicit_content_filter: ExplicitContentFilterLevel;
+
+	/**
+	 * Roles in the guild.
+	 */
 	roles: Role[];
+
+	/**
+	 * Custom guild emojis.
+	 */
 	emojis: Emoji[];
 
 	/**
 	 * Enabled guild features.
 	 */
 	features: `${GuildFeature}`[];
+
+	/**
+	 * Required MFA level for the guild.
+	 */
 	mfa_level: MFALevel;
 
 	/**
 	 * Application ID of the guild creator if it is bot-created.
 	 */
-	application_id: Nullable<Snowflake>;
+	application_id: Nullable<snowflake>;
 
 	/**
-	 * The ID of the channel where guild notices such as welcome messages and boost events are
-	 * posted.
+	 * The ID of the channel where guild notices such as welcome messages and
+	 * boost events are posted.
 	 */
-	system_channel_id: Nullable<Snowflake>;
+	system_channel_id: Nullable<snowflake>;
+
+	/**
+	 * System channel flags.
+	 */
 	system_channel_flags: SystemChannelFlags;
 
 	/**
-	 * The ID of the channel where Community guilds can display rules and/or guidelines.
+	 * The ID of the channel where Community guilds can display rules and/or
+	 * guidelines.
 	 */
-	rules_channel_id: Nullable<Snowflake>;
+	rules_channel_id: Nullable<snowflake>;
 
 	/**
+	 * When this guild was joined at.
+	 *
 	 * @remarks
 	 * This field is only sent within the `GUILD_CREATE` event.
 	 */
@@ -173,7 +221,7 @@ export interface Guild extends PartialGuild {
 	member_count?: number;
 
 	/**
-	 * States of members currently in voice channels.
+	 * States of members currently in voice channels; lacks the `guild_id` key.
 	 *
 	 * @remarks
 	 * This field is only sent within the `GUILD_CREATE` event.
@@ -181,12 +229,16 @@ export interface Guild extends PartialGuild {
 	voice_states?: Omit<VoiceState, 'guild_id'>[];
 
 	/**
+	 * Users in the guild.
+	 *
 	 * @remarks
 	 * This field is only sent within the `GUILD_CREATE` event.
 	 */
 	members?: GuildMember[];
 
 	/**
+	 * Channels in the guild.
+	 *
 	 * @remarks
 	 * This field is only sent within the `GUILD_CREATE` event.
 	 */
@@ -201,8 +253,8 @@ export interface Guild extends PartialGuild {
 	threads?: ThreadChannel[];
 
 	/**
-	 * Presences of the members in the guild, will only include non-offline members if the size is
-	 * greater than `large threshold`.
+	 * Presences of the members in the guild, will only include non-offline
+	 * members if the size is greater than `large threshold`.
 	 *
 	 * @remarks
 	 * This field is only sent within the `GUILD_CREATE` event.
@@ -210,8 +262,7 @@ export interface Guild extends PartialGuild {
 	presences?: Partial<PresenceUpdate['d']>[];
 
 	/**
-	 * The maximum number of presences for the guild (the default value, currently `25000`, is in
-	 * effect when `null` is returned).
+	 * The maximum number of presences for the guild.
 	 */
 	max_presences?: Nullable<number>;
 
@@ -219,6 +270,10 @@ export interface Guild extends PartialGuild {
 	 * The maximum number of members for the guild.
 	 */
 	max_members?: number;
+
+	/**
+	 * The vanity URL code for the guild.
+	 */
 	vanity_url_code: Nullable<string>;
 
 	/**
@@ -227,7 +282,12 @@ export interface Guild extends PartialGuild {
 	description: Nullable<string>;
 
 	/**
-	 * Premium tier (server Boost level).
+	 * Banner hash.
+	 */
+	banner: Nullable<string>;
+
+	/**
+	 * Premium tier (Server Boost level).
 	 */
 	premium_tier: PremiumTier;
 
@@ -237,38 +297,58 @@ export interface Guild extends PartialGuild {
 	premium_subscription_count?: number;
 
 	/**
-	 * The preferred locale of a Community guild; used in server discovery and notices from Discord.
+	 * The preferred locale of a Community guild; used in server discovery and
+	 * notices from Discord.
 	 *
 	 * @defaultValue `en-US`
 	 */
 	preferred_locale: string;
 
 	/**
-	 * The ID of the channel where admins and moderators of Community guilds receive notices from
-	 * Discord.
+	 * The ID of the channel where admins and moderators of Community guilds
+	 * receive notices from Discord.
 	 */
-	public_updates_channel_id: Nullable<Snowflake>;
+	public_updates_channel_id: Nullable<snowflake>;
+
+	/**
+	 * The maximum amount of users in a video channel.
+	 */
 	max_video_channel_users?: number;
 
 	/**
-	 * Approximate number of members in this guild, returned from the `GET /guilds/{guild.id}`
-	 * endpoint when `with_counts` is `true`.
+	 * Approximate number of members in this guild. Returned from the
+	 * `GET /guilds/{guild.id}` endpoint when `with_counts` is `true`.
 	 */
 	approximate_member_count?: number;
 
 	/**
-	 * Approximate number of non-offline members in this guild, returned from the
-	 * `GET /guilds/{guild.id}` endpoint when `with_counts` is `true`.
+	 * Approximate number of non-offline members in this guild. Returned from
+	 * the `GET /guilds/{guild.id}` endpoint when `with_counts` is `true`.
 	 */
 	approximate_presence_count?: number;
 
 	/**
-	 * The welcome screen of a Community guild, shown to new members, returned when in the invite
-	 * object.
+	 * The welcome screen of a Community guild, shown to new members. Returned
+	 * when in the invite object.
 	 */
 	welcome_screen?: WelcomeScreen;
+
+	/**
+	 * Guild NSFW level.
+	 */
 	nsfw_level: GuildNSFWLevel;
+
+	/**
+	 * Stage instances in the guild.
+	 *
+	 * @remarks
+	 * This field is only sent within the `GUILD_CREATE` event.
+	 */
 	stage_instances?: StageInstance[];
+
+	/**
+	 * Custom guild stickers.
+	 */
 	stickers?: GuildSticker[];
 }
 
@@ -282,7 +362,8 @@ export enum DefaultMessageNotificationLevel {
 	AllMessages,
 
 	/**
-	 * Members will receive notifications only for messages that `@mention` them by default.
+	 * Members will receive notifications only for messages that `@mention`
+	 * them by default.
 	 */
 	OnlyMentions
 }
@@ -424,8 +505,8 @@ export enum GuildFeature {
 	Commerce = 'COMMERCE',
 
 	/**
-	 * Guild can enable welcome screen, Membership Screening, stage channels, and discovery, and
-	 * receives community updates.
+	 * Guild can enable welcome screen, Membership Screening, stage channels,
+	 * and discovery, and receives community updates.
 	 */
 	Community = 'COMMUNITY',
 
@@ -475,7 +556,8 @@ export enum GuildFeature {
 	Partnered = 'PARTNERED',
 
 	/**
-	 * Guild can be previewed before joining via Membership Screening or the directory.
+	 * Guild can be previewed before joining via Membership Screening or the
+	 * directory.
 	 */
 	PreviewEnabled = 'PREVIEW_ENABLED',
 
@@ -510,7 +592,8 @@ export enum GuildFeature {
 	Verified = 'VERIFIED',
 
 	/**
-	 * Guild has access to set 384kbps bitrate in voice (previously VIP voice servers).
+	 * Guild has access to set 384kbps bitrate in voice (previously VIP voice
+	 * servers).
 	 */
 	VIPRegions = 'VIP_REGIONS',
 
@@ -521,42 +604,24 @@ export enum GuildFeature {
 }
 
 /**
- * Represents an Offline Guild, or a Guild whose information has not been provided through Guild
- * Create events during the Gateway connect.
+ * Represents an Offline Guild, or a Guild whose information has not been
+ * provided through Guild Create events during the Gateway connect.
  *
  * @source {@link https://discord.com/developers/docs/resources/guild#unavailable-guild-object-example-unavailable-guild|Guild}
  */
-export interface UnavailableGuild extends Identifiable {
-	unavailable: true;
+export interface UnavailableGuild {
+	/**
+	 * Guild ID.
+	 */
+	id: snowflake;
+	readonly unavailable: true;
 }
 
 /**
  * @source {@link https://discord.com/developers/docs/resources/guild#guild-preview-object-guild-preview-structure|Guild}
  */
-export interface GuildPreview extends Identifiable {
-	name: string;
-
-	/**
-	 * Icon hash.
-	 */
-	icon: Nullable<string>;
-
-	/**
-	 * Splash hash.
-	 */
-	splash: Nullable<string>;
-
-	/**
-	 * Discovery splash hash.
-	 */
-	discovery_splash: Nullable<string>;
-	emojis: Emoji[];
-
-	/**
-	 * Enabled guild features.
-	 */
-	features: `${GuildFeature}`[];
-
+export interface GuildPreview
+	extends Pick<Guild, 'id' | 'name' | 'icon' | 'splash' | 'discovery_splash' | 'emojis' | 'features'> {
 	/**
 	 * Approximate number of members in this guild.
 	 */
@@ -585,35 +650,55 @@ export interface GuildWidgetSettings {
 	/**
 	 * The widget channel ID.
 	 */
-	channel_id: Nullable<Snowflake>;
+	channel_id: Nullable<snowflake>;
 }
 
 /**
  * @source {@link https://discord.com/developers/docs/resources/guild#get-guild-widget-example-get-guild-widget|Guild}
  */
-export interface GuildWidget extends Identifiable {
+export interface GuildWidget {
+	id: snowflake;
 	name: string;
-	instant_invite: string;
-	channels: Omit<PartialChannel, 'type'>[];
+	instant_invite: Nullable<string>;
+	channels: GuildWidgetChannel[];
 	members: GuildWidgetMember[];
 	presence_count: number;
 }
 
+/**
+ * @source {@link https://discord.com/developers/docs/resources/guild#get-guild-widget-example-get-guild-widget|Guild}
+ */
+export type GuildWidgetChannel = Omit<PartialChannel, 'type'> & Pick<TextChannel, 'position'>;
+
 export interface GuildWidgetMember extends PartialUser {
 	status: StatusType;
 	avatar_url: string;
+	activity?: { name: string };
 }
 
+/**
+ * @source {@link https://discord.com/developers/docs/resources/invite#invite-stage-instance-object-example-invite-stage-instance|Invite}
+ */
 export interface PartialGuildMember {
+	/**
+	 * The user this guild member represents.
+	 */
+	user?: User;
+
 	/**
 	 * This users guild nickname.
 	 */
 	nick?: Nullable<string>;
 
 	/**
+	 * The member's guild avatar hash.
+	 */
+	avatar: Nullable<string>;
+
+	/**
 	 * Array of role object IDs.
 	 */
-	roles: Snowflake[];
+	roles: snowflake[];
 
 	/**
 	 * When the user joined the guild.
@@ -626,37 +711,23 @@ export interface PartialGuildMember {
 	premium_since?: Nullable<string>;
 
 	/**
-	 * Whether the user has not yet passed the guild's Membership Screening requirements.
+	 * Whether the user has not yet passed the guild's Membership Screening
+	 * requirements.
 	 */
 	pending?: boolean;
-
-	/**
-	 * Total permissions of the member in the channel, including overwrites, returned when in the
-	 * interaction object.
-	 */
-	permissions?: string;
 }
 
 /**
  * @remarks
- * - The field `user` won't be included in the member object attached to `MESSAGE_CREATE` and
- * `MESSAGE_UPDATE` gateway events.
- * - In `GUILD_` events, `pending` will always be included as `true` or `false`. In non `GUILD_`
- * events which can only be triggered by non-`pending` users, `pending` will not be included.
+ * - The `user` field won't be included in the member object attached to
+ * `MESSAGE_CREATE` and `MESSAGE_UPDATE` gateway events.
+ * - In `GUILD_` events, `pending` will always be included as `true` or `false`.
+ * In non `GUILD_` events which can only be triggered by non-`pending` users,
+ * `pending` will not be included.
  *
  * @source {@link https://discord.com/developers/docs/resources/guild#guild-member-object-guild-member-structure|Guild}
  */
 export interface GuildMember extends PartialGuildMember {
-	/**
-	 * The user this guild member represents.
-	 */
-	user?: User;
-
-	/**
-	 * The member's guild avatar hash.
-	 */
-	avatar: Nullable<string>;
-
 	/**
 	 * Whether the user is deafened in voice channels.
 	 */
@@ -666,13 +737,32 @@ export interface GuildMember extends PartialGuildMember {
 	 * Whether the user is muted in voice channels.
 	 */
 	mute: boolean;
+
+	/**
+	 * Total permissions of the member in the channel, including overwrites.
+	 * Returned when in the interaction object.
+	 */
+	permissions?: string;
 }
 
 /**
  * @source {@link https://discord.com/developers/docs/resources/audit-log#audit-log-object-example-partial-integration-object|Audit Log}
  */
-export interface PartialIntegration extends Identifiable, WithType<IntegrationType> {
+export interface PartialIntegration {
+	/**
+	 * Integration ID.
+	 */
+	id: snowflake;
+
+	/**
+	 * Integration name.
+	 */
 	name: string;
+
+	/**
+	 * Integration type.
+	 */
+	type: IntegrationType;
 
 	/**
 	 * Integration account information.
@@ -684,9 +774,14 @@ export interface PartialIntegration extends Identifiable, WithType<IntegrationTy
  * @source {@link https://discord.com/developers/docs/resources/guild#integration-object-integration-structure|Guild}
  */
 export interface Integration extends PartialIntegration {
+	/**
+	 * Is this integration enabled.
+	 */
 	enabled: boolean;
 
 	/**
+	 * Is this integration syncing.
+	 *
 	 * @remarks
 	 * This field is not provided for discord bot integrations.
 	 */
@@ -698,10 +793,11 @@ export interface Integration extends PartialIntegration {
 	 * @remarks
 	 * This field is not provided for discord bot integrations.
 	 */
-	role_id?: Snowflake;
+	role_id?: snowflake;
 
 	/**
-	 * Whether emoticons should be synced for this integration (Twitch only currently).
+	 * Whether emoticons should be synced for this integration (Twitch only
+	 * currently).
 	 *
 	 * @remarks
 	 * This field is not provided for discord bot integrations.
@@ -747,6 +843,13 @@ export interface Integration extends PartialIntegration {
 	 * This field is not provided for discord bot integrations.
 	 */
 	subscriber_count?: number;
+
+	/**
+	 * Has this integration been revoked.
+	 *
+	 * @remarks
+	 * This field is not provided for discord bot integrations.
+	 */
 	revoked?: boolean;
 
 	/**
@@ -768,19 +871,45 @@ export enum IntegrationExpireBehavior {
 /**
  * @source {@link https://discord.com/developers/docs/resources/guild#integration-account-object-integration-account-structure|Guild}
  */
-export interface IntegrationAccount extends Identifiable {
+export interface IntegrationAccount {
+	/**
+	 * ID of the account.
+	 */
+	id: string;
+
+	/**
+	 * Name of the account.
+	 */
 	name: string;
 }
 
 /**
  * @source {@link https://discord.com/developers/docs/resources/guild#integration-application-object-integration-application-structure|Guild}
  */
-export interface IntegrationApplication extends IntegrationAccount {
+export interface IntegrationApplication {
+	/**
+	 * The ID of the app.
+	 */
+	id: snowflake;
+
+	/**
+	 * The name of the app.
+	 */
+	name: string;
+
 	/**
 	 * The icon hash of the app.
 	 */
 	icon: Nullable<string>;
+
+	/**
+	 * The description of the app.
+	 */
 	description: string;
+
+	/**
+	 * The summary of the app.
+	 */
 	summary: string;
 
 	/**
@@ -793,6 +922,9 @@ export interface IntegrationApplication extends IntegrationAccount {
  * @source {@link https://discord.com/developers/docs/resources/guild#ban-object-ban-structure|Guild}
  */
 export interface Ban {
+	/**
+	 * The reason for the ban.
+	 */
 	reason: Nullable<string>;
 
 	/**
@@ -811,7 +943,7 @@ export interface WelcomeScreen {
 	description: Nullable<string>;
 
 	/**
-	 * The channels shown in the welcome screen.
+	 * The channels shown in the welcome screen (up to `5`).
 	 */
 	welcome_channels: Partial<Tuple<WelcomeScreenChannel, 5>>;
 }
@@ -820,7 +952,10 @@ export interface WelcomeScreen {
  * @source {@link https://discord.com/developers/docs/resources/guild#welcome-screen-object-welcome-screen-channel-structure|Guild}
  */
 export interface WelcomeScreenChannel {
-	channel_id: Snowflake;
+	/**
+	 * The channel's ID.
+	 */
+	channel_id: snowflake;
 
 	/**
 	 * The description shown for the channel.
@@ -830,22 +965,24 @@ export interface WelcomeScreenChannel {
 	/**
 	 * The emoji ID, if the emoji is custom.
 	 */
-	emoji_id: Nullable<Snowflake>;
+	emoji_id: Nullable<snowflake>;
 
 	/**
-	 * The emoji name if custom, the unicode character if standard, or `null` if no emoji is set.
+	 * The emoji name if custom, the unicode character if standard, or `null` if
+	 * no emoji is set.
 	 */
 	emoji_name: Nullable<string>;
 }
 
 /**
- * In guilds with Membership Screening enabled, when a member joins, Guild Member Add will
- * be emitted but they will initially be restricted from doing any actions in the guild, and
- * `pending` will be `true` in the member object. When the member completes the screening, Guild
- * Member Update will be emitted and `pending` will be `false`.
+ * In guilds with Membership Screening enabled, when a member joins, Guild
+ * Member Add will be emitted but they will initially be restricted from doing
+ * any actions in the guild, and `pending` will be `true` in the member object.
+ * When the member completes the screening, Guild Member Update will be emitted
+ * and `pending` will be `false`.
  *
- * Giving the member a role will bypass Membership Screening as well as the guild's verification
- * level, giving the member immediate access to chat.
+ * Giving the member a role will bypass Membership Screening as well as the
+ * guild's verification level, giving the member immediate access to chat.
  *
  * @source {@link https://discord.com/developers/docs/resources/guild#membership-screening-object|Guild}
  */

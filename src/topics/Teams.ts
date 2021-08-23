@@ -1,15 +1,19 @@
 import type { Nullable } from 'extended-utility-types';
-import type { PartialUser, Snowflake } from '../';
-import type { Identifiable } from '../__internal__';
+import type { PartialUser, snowflake } from '../';
 
 /**
  * @source {@link https://discord.com/developers/docs/topics/teams#data-models-team-object|Teams}
  */
-export interface Team extends Identifiable {
+export interface Team {
 	/**
 	 * A hash of the image of the team's icon.
 	 */
 	icon: Nullable<string>;
+
+	/**
+	 * The unique ID of the team.
+	 */
+	id: snowflake;
 
 	/**
 	 * The members of the team.
@@ -24,7 +28,7 @@ export interface Team extends Identifiable {
 	/**
 	 * The user ID of the current team owner.
 	 */
-	owner_user_id: Snowflake;
+	owner_user_id: snowflake;
 }
 
 /**
@@ -35,12 +39,12 @@ export interface TeamMember {
 	 * The user's membership state on the team.
 	 */
 	membership_state: MembershipState;
-	permissions: readonly ['*'];
+	readonly permissions: ['*'];
 
 	/**
 	 * The ID of the parent team of which they are a member.
 	 */
-	team_id: Snowflake;
+	team_id: snowflake;
 
 	/**
 	 * The avatar, discriminator, ID, and username of the user.

@@ -1,10 +1,12 @@
 import type { Nullable, Tuple } from 'extended-utility-types';
-import type { GuildIdentifiable } from '../__internal__';
+import { snowflake } from '../';
 
 /**
  * Used to represent a guild's Discovery settings.
  */
-export interface DiscoveryMetadata extends GuildIdentifiable {
+export interface DiscoveryMetadata {
+	guild_id: snowflake;
+
 	/**
 	 * The ID of the primary discovery category set for this guild..
 	 */
@@ -16,13 +18,14 @@ export interface DiscoveryMetadata extends GuildIdentifiable {
 	keywords: Nullable<Partial<Tuple<string, 10>>>;
 
 	/**
-	 * Whether guild info is shown when custom emojis from this guild are clicked.
+	 * Whether guild info is shown when custom emojis from this guild are
+	 * clicked.
 	 */
 	emoji_discoverability_enabled: boolean;
 
 	/**
-	 * When the server's partner application was accepted or denied, for applications via Server
-	 * Settings.
+	 * When the server's partner application was accepted or denied, for
+	 * applications via Server Settings.
 	 */
 	partner_actioned_timestamp: Nullable<string>;
 

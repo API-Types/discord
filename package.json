@@ -1,6 +1,6 @@
 {
 	"name": "@api-typings/discord",
-	"version": "5.4.0",
+	"version": "6.0.0",
 	"description": "API Typings for the Discord API",
 	"main": "dist/index.js",
 	"typings": "dist/typings/index.d.ts",
@@ -25,16 +25,16 @@
 	},
 	"license": "BSD-3-Clause",
 	"dependencies": {
-		"extended-utility-types": "^2.0.0"
+		"extended-utility-types": "^2.1.0"
 	},
 	"devDependencies": {
 		"@microsoft/tsdoc-config": "^0.15.2",
-		"@types/node": "^15.12.5",
-		"@typescript-eslint/eslint-plugin": "^4.28.1",
-		"@typescript-eslint/parser": "^4.28.1",
-		"eslint": "^7.29.0",
+		"@types/node": "^16.7.1",
+		"@typescript-eslint/eslint-plugin": "^4.29.2",
+		"@typescript-eslint/parser": "^4.29.2",
+		"eslint": "^7.32.0",
 		"eslint-plugin-tsdoc": "^0.2.14",
 		"prettier": "^2.3.2",
-		"typescript": "^4.3.4"
+		"typescript": "^4.3.5"
 	}
 }

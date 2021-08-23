@@ -1,6 +1,6 @@
 import type { Nullable } from 'extended-utility-types';
 import type {
-	ChannelType,
+	AutoArchiveDuration,
 	DefaultMessageNotificationLevel,
 	ExplicitContentFilterLevel,
 	IntegrationExpireBehavior,
@@ -9,18 +9,19 @@ import type {
 	PartialIntegration,
 	PartialRole,
 	PrivacyLevel,
-	Snowflake,
+	snowflake,
 	StickerFormatType,
+	ThreadChannel,
 	User,
 	VerificationLevel,
 	Webhook
 } from '../';
-import type { Identifiable } from '../__internal__';
 
 /**
- * Whenever an admin action is performed on the API, an entry is added to the respective guild's
- * audit log. A reason can be specified by attaching the `X-Audit-Log-Reason` request header. This
- * header supports URL encoded `UTF-8` characters.
+ * Whenever an admin action is performed on the API, an entry is added to the
+ * respective guild's audit log. A reason can be specified by attaching the
+ * `X-Audit-Log-Reason` request header. This header supports URL encoded
+ * `UTF-8` characters.
  *
  * @source {@link https://discord.com/developers/docs/resources/audit-log#audit-log-object-audit-log-structure|Audit Log}
  */
@@ -44,28 +45,41 @@ export interface AuditLog {
 	 * List of partial integration objects.
 	 */
 	integrations: PartialIntegration[];
+
+	/**
+	 * List of threads found in the audit log.
+	 *
+	 * @remarks
+	 * Threads referenced in `THREAD_CREATE` and `THREAD_UPDATE` events are
+	 * included in the threads map, since archived threads might not be kept in
+	 * memory by clients.
+	 */
+	threads: ThreadChannel[];
 }
 
 /**
  * @source {@link https://discord.com/developers/docs/resources/audit-log#audit-log-entry-object-audit-log-entry-structure|Audit Log}
  */
-export interface AuditLogEntry extends Identifiable {
+export interface AuditLogEntry {
 	/**
 	 * ID of the affected entity.
 	 */
-	target_id: Nullable<Snowflake>;
+	target_id: Nullable<string>;
 
 	/**
 	 * Changes made to the `target_id`.
 	 */
-	changes?: {
-		[K in keyof AuditLogChangeKey]: AuditLogChange<K>;
-	}[keyof AuditLogChangeKey][];
+	changes?: AuditLogChange[];
 
 	/**
 	 * The user who made the changes.
 	 */
-	user_id: Nullable<Snowflake>;
+	user_id: Nullable<snowflake>;
+
+	/**
+	 * ID of the entry.
+	 */
+	id: snowflake;
 
 	/**
 	 * Type of action that occurred.
@@ -75,7 +89,7 @@ export interface AuditLogEntry extends Identifiable {
 	/**
 	 * Additional info for certain action types.
 	 */
-	options?: AuditLogEntryInfo;
+	options?: OptionalAuditEntryInfo;
 
 	/**
 	 * The reason for the change (`0-512` characters).
@@ -127,26 +141,31 @@ export enum AuditLogEvent {
 	StageInstanceDelete,
 	StickerCreate = 90,
 	StickerUpdate,
-	StickerDelete
+	StickerDelete,
+	ThreadCreate = 110,
+	ThreadUpdate,
+	ThreadDelete
 }
 
 /**
  * @source {@link https://discord.com/developers/docs/resources/audit-log#audit-log-entry-object-optional-audit-entry-info|Audit Log}
  */
-export interface AuditLogEntryInfo {
+export interface OptionalAuditEntryInfo {
 	/**
-	 * Number of days after which inactive members were kicked. Only present on `MEMBER_PRUNE`
-	 * actions.
+	 * Number of days after which inactive members were kicked. Only present on
+	 * `MEMBER_PRUNE` action types.
 	 */
 	delete_member_days?: string;
 
 	/**
-	 * Number of members removed by the prune. Only present on `MEMBER_PRUNE` actions.
+	 * Number of members removed by the prune. Only present on `MEMBER_PRUNE`
+	 * action types.
 	 */
 	members_removed?: string;
 
 	/**
-	 * Channel in which the entities were targeted. Present on the following actions:
+	 * Channel in which the entities were targeted. Present on the following
+	 * action types:
 	 * - `MEMBER_MOVE`
 	 * - `MESSAGE_PIN`
 	 * - `MESSAGE_UNPIN`
@@ -155,17 +174,19 @@ export interface AuditLogEntryInfo {
 	 * - `STAGE_INSTANCE_UPDATE`
 	 * - `STAGE_INSTANCE_DELETE`
 	 */
-	channel_id?: Snowflake;
+	channel_id?: snowflake;
 
 	/**
-	 * ID of the message that was targeted. Present on the following actions:
+	 * ID of the message that was targeted. Present on the following action
+	 * types:
 	 * - `MESSAGE_PIN`
 	 * - `MESSAGE_UNPIN`
 	 */
-	message_id?: Snowflake;
+	message_id?: snowflake;
 
 	/**
-	 * Number of entities that were targeted. Present on the following actions:
+	 * Number of entities that were targeted. Present on the following action
+	 * types:
 	 * - `MESSAGE_DELETE`
 	 * - `MESSAGE_BULK_DELETE`
 	 * - `MEMBER_DISCONNECT`
@@ -174,16 +195,16 @@ export interface AuditLogEntryInfo {
 	count?: string;
 
 	/**
-	 * ID of the overwritten entity. Present on the following actions:
+	 * ID of the overwritten entity. Present on the following action types:
 	 * - `CHANNEL_OVERWRITE_CREATE`
 	 * - `CHANNEL_OVERWRITE_UPDATE`
 	 * - `CHANNEL_OVERWRITE_DELETE`
 	 */
-	id?: Snowflake;
+	id?: snowflake;
 
 	/**
-	 * Type of overwritten entity–`'0'` for `role` or `'1'` for `member`. Present on the following
-	 * actions:
+	 * Type of overwritten entity–`'0'` for `role` or `'1'` for `member`.
+	 * Present on the following action types:
 	 * - `CHANNEL_OVERWRITE_CREATE`
 	 * - `CHANNEL_OVERWRITE_UPDATE`
 	 * - `CHANNEL_OVERWRITE_DELETE`
@@ -191,8 +212,8 @@ export interface AuditLogEntryInfo {
 	type?: '0' | '1';
 
 	/**
-	 * Name of the role if type is `'0'` (not present if type is `'1'`). Present on the following
-	 * actions:
+	 * Name of the role if type is `'0'` (not present if type is `'1'`). Present
+	 * on the following action types:
 	 * - `CHANNEL_OVERWRITE_CREATE`
 	 * - `CHANNEL_OVERWRITE_UPDATE`
 	 * - `CHANNEL_OVERWRITE_DELETE`
@@ -202,12 +223,14 @@ export interface AuditLogEntryInfo {
 
 /**
  * @remarks
- * If `new_value` is not present in the change object, while `old_value` is, that means the
- * property that was changed has been reset, or set to `null`.
+ * If `new_value` is not present in the change object, while `old_value` is,
+ * that means the property that was changed has been reset, or set to `null`.
  *
  * @source {@link https://discord.com/developers/docs/resources/audit-log#audit-log-change-object-audit-log-change-structure|Audit Log}
  */
-export interface AuditLogChange<K extends keyof AuditLogChangeKey> {
+export type AuditLogChange = { [K in keyof AuditLogChangeKey]: BaseAuditLogChange<K> }[keyof AuditLogChangeKey];
+
+export interface BaseAuditLogChange<K extends keyof AuditLogChangeKey> {
 	/**
 	 * New value of the key.
 	 */
@@ -229,12 +252,12 @@ export interface AuditLogChange<K extends keyof AuditLogChangeKey> {
  */
 export interface AuditLogChangeKey {
 	/**
-	 * Guild name changed.
+	 * Any name changed.
 	 */
 	name: string;
 
 	/**
-	 * Guild description changed.
+	 * Guild or sticker description changed.
 	 */
 	description: string;
 
@@ -261,7 +284,7 @@ export interface AuditLogChangeKey {
 	/**
 	 * Guild owner changed.
 	 */
-	owner_id: Snowflake;
+	owner_id: snowflake;
 
 	/**
 	 * Guild region changed.
@@ -276,7 +299,7 @@ export interface AuditLogChangeKey {
 	/**
 	 * Guild AFK channel changed.
 	 */
-	afk_channel_id: Snowflake;
+	afk_channel_id: snowflake;
 
 	/**
 	 * Guild AFK timeout duration changed.
@@ -286,12 +309,12 @@ export interface AuditLogChangeKey {
 	/**
 	 * Guild's rules channel changed.
 	 */
-	rules_channel_id: Snowflake;
+	rules_channel_id: snowflake;
 
 	/**
 	 * Guild's public updates channel changed.
 	 */
-	public_updates_channel_id: Snowflake;
+	public_updates_channel_id: snowflake;
 
 	/**
 	 * Guild's two-factor auth requirement changed.
@@ -304,7 +327,8 @@ export interface AuditLogChangeKey {
 	verification_level: VerificationLevel;
 
 	/**
-	 * Change in whose messages are scanned and deleted for explicit content in the server.
+	 * Change in whose messages are scanned and deleted for explicit content in
+	 * the server.
 	 */
 	explicit_content_filter: ExplicitContentFilterLevel;
 
@@ -329,7 +353,8 @@ export interface AuditLogChangeKey {
 	$remove: PartialRole[];
 
 	/**
-	 * Change in number of days after which inactive and role-unassigned members are kicked.
+	 * Change in number of days after which inactive and role-unassigned members
+	 * are kicked.
 	 */
 	prune_delete_days: number;
 
@@ -341,12 +366,12 @@ export interface AuditLogChangeKey {
 	/**
 	 * Channel ID of the server widget changed.
 	 */
-	widget_channel_id: Snowflake;
+	widget_channel_id: snowflake;
 
 	/**
 	 * ID of the system channel of the server changed.
 	 */
-	system_channel_id: Snowflake;
+	system_channel_id: snowflake;
 
 	/**
 	 * Text or voice channel position changed.
@@ -354,7 +379,7 @@ export interface AuditLogChangeKey {
 	position: number;
 
 	/**
-	 * Text channel or stage instance topic changed.
+	 * Channel or stage instance topic changed.
 	 */
 	topic: string;
 
@@ -376,10 +401,11 @@ export interface AuditLogChangeKey {
 	/**
 	 * Application ID of the added or removed webhook or bot.
 	 */
-	application_id: Snowflake;
+	application_id: snowflake;
 
 	/**
-	 * Amount of seconds a user has to wait before sending another message changed.
+	 * Amount of seconds a user has to wait before sending another message
+	 * changed.
 	 */
 	rate_limit_per_user: number;
 
@@ -421,12 +447,12 @@ export interface AuditLogChangeKey {
 	/**
 	 * Channel for invite code changed.
 	 */
-	channel_id: Snowflake;
+	channel_id: snowflake;
 
 	/**
 	 * Person who created invite code changed.
 	 */
-	inviter_id: Snowflake;
+	inviter_id: snowflake;
 
 	/**
 	 * Change to max number of times invite code can be used.
@@ -469,14 +495,15 @@ export interface AuditLogChangeKey {
 	avatar_hash: string;
 
 	/**
-	 * The ID of the changed entity–sometimes used in conjunction with other keys.
+	 * The ID of the changed entity–sometimes used in conjunction with other
+	 * keys.
 	 */
-	id: Snowflake;
+	id: snowflake;
 
 	/**
 	 * Type of entity created.
 	 */
-	type: ChannelType | string;
+	type: number | string;
 
 	/**
 	 * Integration emoticons enabled/disabled.
@@ -521,5 +548,25 @@ export interface AuditLogChangeKey {
 	/**
 	 * The guild the sticker is in changed.
 	 */
-	guild_id: Snowflake;
+	guild_id: snowflake;
+
+	/**
+	 * Thread is now archived/unarchived.
+	 */
+	archived: boolean;
+
+	/**
+	 * Thread is now locked/unlocked.
+	 */
+	locked: boolean;
+
+	/**
+	 * Auto archive duration changed.
+	 */
+	auto_archive_duration: AutoArchiveDuration;
+
+	/**
+	 * Default auto archive duration for newly created threads changed.
+	 */
+	default_auto_archive_duration: AutoArchiveDuration;
 }

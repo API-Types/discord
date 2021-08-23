@@ -1,5 +1,5 @@
 import type { Nullable } from 'extended-utility-types';
-import type { PrivacyLevel, Snowflake, StageInstance } from '../../';
+import type { PrivacyLevel, StageInstance } from '../../';
 
 /**
  * Creates a new Stage instance associated to a Stage channel.
@@ -22,7 +22,8 @@ export interface CreateStageInstance {
 	};
 
 	response: StageInstance & {
-		guild_scheduled_event_id: Nullable<Snowflake>;
+		guild_scheduled_event_id: Nullable<string>;
+		invite_code: Nullable<string>;
 	};
 }
 

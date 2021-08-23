@@ -22,10 +22,10 @@ export interface GetInvite {
 }
 
 /**
- * Delete an invite. Returns an invite object on success. Fires a Invite Delete Gateway event.
- *
- * Requires the `MANAGE_CHANNELS` permission on the channel this invite belongs to, or
- * `MANAGE_GUILD` to remove any invite across the guild.
+ * Delete an invite. Requires the `MANAGE_CHANNELS` permission on the channel
+ * this invite belongs to, or `MANAGE_GUILD` to remove any invite across the
+ * guild. Returns an invite object on success. Fires a Invite Delete Gateway
+ * event.
  *
  * @remarks
  * This endpoint supports the `X-Audit-Log-Reason` header.

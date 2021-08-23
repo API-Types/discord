@@ -1,11 +1,18 @@
-import type { Nullable } from 'extended-utility-types';
-import type { ActionRow, AllowedMentions, Attachment, Message, PartialEmbed, Snowflake, Webhook } from '../../';
-import type { PartialTuple } from '../../__internal__';
+import type { Nullable, Tuple } from 'extended-utility-types';
+import type {
+	ActionRow,
+	AllowedMentions,
+	Attachment,
+	IncomingWebhook,
+	Message,
+	PartialEmbed,
+	snowflake,
+	Webhook
+} from '../../';
 
 /**
- * Create a new webhook. Returns a webhook object on success.
- *
- * Requires the `MANAGE_WEBHOOKS` permission.
+ * Create a new webhook. Requires the `MANAGE_WEBHOOKS` permission. Returns a
+ * webhook object on success.
  *
  * @endpoint [POST](https://discord.com/developers/docs/resources/webhook#create-webhook) `/channels/{channel.id}/webhooks`
  */
@@ -22,13 +29,12 @@ export interface CreateWebhook {
 		avatar?: Nullable<string>;
 	};
 
-	response: Webhook;
+	response: IncomingWebhook;
 }
 
 /**
- * Returns a list of channel webhook objects.
- *
- * Requires the `MANAGE_WEBHOOKS` permission.
+ * Returns a list of channel webhook objects. Requires the `MANAGE_WEBHOOKS`
+ * permission.
  *
  * @endpoint [GET](https://discord.com/developers/docs/resources/webhook#get-channel-webhooks) `/channels/{channel.id}/webhooks`
  */
@@ -37,9 +43,8 @@ export interface GetChannelWebhooks {
 }
 
 /**
- * Returns a list of guild webhook objects.
- *
- * Requires the `MANAGE_WEBHOOKS` permission.
+ * Returns a list of guild webhook objects. Requires the `MANAGE_WEBHOOKS`
+ * permission.
  *
  * @endpoint [GET](https://discord.com/developers/docs/resources/webhook#get-guild-webhooks) `/guilds/{guild.id}/webhooks`
  */
@@ -57,7 +62,7 @@ export interface GetWebhook {
 }
 
 /**
- * Returns the new webhook object for the given ID, except this call does not require authentication
+ * Same as {@link GetWebhook}, except this call does not require authentication
  * and returns no user in the webhook object.
  *
  * @endpoint [GET](https://discord.com/developers/docs/resources/webhook#get-webhook-with-token) `/webhooks/{webhook.id}/{webhook.token}`
@@ -67,9 +72,8 @@ export interface GetWebookWithToken {
 }
 
 /**
- * Modify a webhook. Returns the updated webhook object on success.
- *
- * Requires the `MANAGE_WEBHOOKS` permission.
+ * Modify a webhook. Requires the `MANAGE_WEBHOOKS` permission. Returns the
+ * updated webhook object on success.
  *
  * @endpoint [PATCH](https://discord.com/developers/docs/resources/webhook#modify-webhook) `/webhooks/{webhook.id}`
  */
@@ -88,18 +92,16 @@ export interface ModifyWebhook {
 		/**
 		 * The new channel ID this webhook should be moved to.
 		 */
-		channel_id?: Nullable<Snowflake>;
+		channel_id?: Nullable<snowflake>;
 	};
 
-	/**
-	 * The updated webhook object.
-	 */
 	response: Webhook;
 }
 
 /**
- * Modifies a webhook, except this call does not require authentication, does not accept a
- * `channel_id` parameter in the body, and does not return a user in the webhook object.
+ * Same as {@link ModifyWebhook}, except this call does not require
+ * authentication, does not accept a `channel_id` parameter in the body, and
+ * does not return a user in the webhook object.
  *
  * @endpoint [PATCH](https://discord.com/developers/docs/resources/webhook#modify-webhook-with-token) `/webhooks/{webhook.id}/{webhook.token}`
  */
@@ -109,9 +111,8 @@ export interface ModifyWebhookWithToken {
 }
 
 /**
- * Delete a webhook permanently. Returns a `204 No Content` response on success.
- *
- * Requires the `MANAGE_WEBHOOKS` permission.
+ * Delete a webhook permanently. Requires the `MANAGE_WEBHOOKS` permission.
+ * Returns a `204 No Content` response on success.
  *
  * @endpoint [DELETE](https://discord.com/developers/docs/resources/webhook#delete-webhook) `/webhooks/{webhook.id}`
  */
@@ -120,7 +121,8 @@ export interface DeleteWebhook {
 }
 
 /**
- * Delete a webhook permanently, except this call does not require authentication.
+ * Same as {@link DeleteWebhook}, except this call does not require
+ * authentication.
  *
  * @endpoint [DELETE](https://discord.com/developers/docs/resources/webhook#delete-webhook-with-token) `/webhooks/{webhook.id}/{webhook.token}`
  */
@@ -130,33 +132,44 @@ export interface DeleteWebhookWithToken {
 
 /**
  * @remarks
- * - For a `file` attachment, the `Content-Disposition` subpart header MUST contain a `filename`
- * parameter.
- * - When uploading files, the `multipart/form-data` content type must be used. Note that in
- * multipart form data, the `embed` and `allowed_mentions` fields cannot be used.
- * - If `payload_json` is supplied, all fields except for `file` fields will be ignored in the form
- * data.
+ * - Note that when executing a webhook, a value for **at least one** of
+ * `content`, `embeds`, or `file` must be provided.
+ * - For a `file` attachment, the `Content-Disposition` subpart header MUST
+ * contain a `filename` parameter.
+ * - This endpoint supports both `application/json` and `multipart/form-data`
+ * bodies. When uploading files, the `multipart/form-data` content type must be
+ * used. Note that in multipart form data, the `embed` and `allowed_mentions`
+ * fields cannot be used. A stringified JSON body as a form value as
+ * `payload_json` can be passed instead. **If a form value for `payload_json` is
+ * supplied, all fields except for `file` fields will be ignored in the form
+ * data**.
  *
  * @endpoint [POST](https://discord.com/developers/docs/resources/webhook#execute-webhook) `/webhooks/{webhook.id}/{webhook.token}`
  */
 export interface ExecuteWebhook {
 	query: {
 		/**
-		 * Waits for server confirmation of message send before response, and returns the created
-		 * message body (when `false`, a message that is not saved does not return an error).
+		 * Waits for server confirmation of message send before response and
+		 * returns the created message body (when `false`, a message that is not
+		 * saved does not return an error).
 		 *
 		 * @defaultValue `false`
 		 */
 		wait?: boolean;
 
 		/**
-		 * Send a message to the specified thread within a webhook's channel. The thread will
-		 * automatically be unarchived.
+		 * Send a message to the specified thread within a webhook's channel.
+		 * The thread will automatically be unarchived.
 		 */
-		thread_id?: Snowflake;
+		thread_id?: snowflake;
 	};
 
 	body: {
+		/**
+		 * The message contents (up to `2000` characters).
+		 */
+		content?: string;
+
 		/**
 		 * Override the default username of the webhook.
 		 */
@@ -175,6 +188,16 @@ export interface ExecuteWebhook {
 		tts?: boolean;
 
 		/**
+		 * The contents of the file being sent.
+		 */
+		file?: unknown;
+
+		/**
+		 * Embedded `rich` content.
+		 */
+		embeds?: Partial<Tuple<PartialEmbed, 10>>;
+
+		/**
 		 * JSON encoded body of non-file params (`multipart/form-data` only).
 		 */
 		payload_json?: Nullable<string>;
@@ -190,34 +213,15 @@ export interface ExecuteWebhook {
 		 * @remarks
 		 * Requires an application-owned webhook.
 		 */
-		components?: PartialTuple<ActionRow, 4>;
-	} & (
-		| {
-				/**
-				 * The message contents (up to `2000` characters).
-				 */
-				content: string;
-		  }
-		| {
-				/**
-				 * The contents of the file being sent.
-				 */
-				file: unknown;
-		  }
-		| {
-				/**
-				 * Embedded `rich` content.
-				 */
-				embeds: PartialTuple<PartialEmbed, 9>;
-		  }
-	);
+		components?: Partial<Tuple<ActionRow, 5>>;
+	};
 
 	response: Message;
 }
 
 /**
- * Returns a previously-sent webhook message from the same token. Returns a message object on
- * success.
+ * Returns a previously-sent webhook message from the same token. Returns a
+ * message object on success.
  *
  * @endpoint [GET](https://discord.com/developers/docs/resources/webhook#get-webhook-message) `/webhooks/{webhook.id}/{webhook.token}/messages/{message.id}`
  */
@@ -226,21 +230,27 @@ export interface GetWebhookMessage {
 }
 
 /**
- * Edits a previously-sent webhook message from the same token. Returns a message object on success.
+ * Edits a previously-sent webhook message from the same token. Returns a
+ * message object on success.
  *
- * When the `content` field is edited, the `mentions` array in the message object will be
- * reconstructed from scratch based on the new content. The `allowed_mentions` field of the edit
- * request controls how this happens. If there is no explicit `allowed_mentions` in the edit
- * request, the content will be parsed with *default* allowances, that is, without regard to whether
- * or not an `allowed_mentions` was present in the request that originally created the message.
+ * When the `content` field is edited, the `mentions` array in the message
+ * object will be reconstructed from scratch based on the new content. The
+ * `allowed_mentions` field of the edit request controls how this happens. If
+ * there is no explicit `allowed_mentions` in the edit request, the content will
+ * be parsed with *default* allowances, that is, without regard to whether or
+ * not an `allowed_mentions` was present in the request that originally created
+ * the message.
  *
  * @remarks
- * - For a `file` attachment, the `Content-Disposition` subpart header MUST contain a `filename`
- * parameter.
- * - When uploading files, the `multipart/form-data` content type must be used. Note that in
- * multipart form data, the `embed` and `allowed_mentions` fields cannot be used.
- * - If `payload_json` is supplied, all fields except for `file` fields will be ignored in the form
- * data.
+ * - For a `file` attachment, the `Content-Disposition` subpart header MUST
+ * contain a `filename` parameter.
+ * - This endpoint supports both `application/json` and `multipart/form-data`
+ * bodies. When uploading files, the `multipart/form-data` content type must be
+ * used. Note that in multipart form data, the `embed` and `allowed_mentions`
+ * fields cannot be used. A stringified JSON body as a form value as
+ * `payload_json` can be passed instead. **If a form value for `payload_json` is
+ * supplied, all fields except for `file` fields will be ignored in the form
+ * data**.
  *
  * @endpoint [PATCH](https://discord.com/developers/docs/resources/webhook#edit-webhook-message) `/webhooks/{webhook.id}/{webhook.token}/messages/{message.id}`
  */
@@ -254,7 +264,7 @@ export interface EditWebhookMessage {
 		/**
 		 * Embedded `rich` content.
 		 */
-		embeds?: Nullable<PartialTuple<PartialEmbed, 9>>;
+		embeds?: Nullable<ExecuteWebhook['body']['embeds']>;
 
 		/**
 		 * The contents of the file being sent/edited.
@@ -282,15 +292,15 @@ export interface EditWebhookMessage {
 		 * @remarks
 		 * Requires an application-owned webhook.
 		 */
-		components?: PartialTuple<ActionRow, 4>;
+		components?: Nullable<ExecuteWebhook['body']['components']>;
 	};
 
 	response: Message;
 }
 
 /**
- * Deletes a message that was created by the webhook. Returns a `204 No Content` response on
- * success.
+ * Deletes a message that was created by the webhook. Returns a `204 No Content`
+ * response on success.
  *
  * @endpoint [DELETE](https://discord.com/developers/docs/resources/webhook#delete-webhook-message) `/webhooks/{webhook.id}/{webhook.token}/messages/{message.id}`
  */

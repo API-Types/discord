@@ -1,17 +1,25 @@
-import type { Snowflake } from '../';
-import type { GuildIdentifiable, Identifiable } from '../__internal__';
+import type { snowflake } from '../';
 
 /**
- * A Stage Instance holds information about a live stage. When a Stage channel has no speakers for
- * a certain period of time (on the order of minutes) it will be automatically deleted.
+ * A Stage Instance holds information about a live stage.
  *
- * @source {@link https://discord.com/developers/docs/resources/stage-instance#stage-instance-structure|Channel}
+ * @source {@link https://discord.com/developers/docs/resources/stage-instance#stage-instance-object-stage-instance-structure|Stage Instance}
  */
-export interface StageInstance extends Identifiable, GuildIdentifiable {
+export interface StageInstance {
+	/**
+	 * The ID of this Stage instance.
+	 */
+	id: snowflake;
+
+	/**
+	 * The guild ID of the associated Stage channel.
+	 */
+	guild_id: snowflake;
+
 	/**
 	 * The ID of the associated Stage channel.
 	 */
-	channel_id: Snowflake;
+	channel_id: snowflake;
 
 	/**
 	 * The topic of the Stage instance (`1-120` characters).

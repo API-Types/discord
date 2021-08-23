@@ -1,5 +1,5 @@
 import type { Nullable } from 'extended-utility-types';
-import type { Emoji, Snowflake } from '../../';
+import type { Emoji, snowflake } from '../../';
 
 /**
  * Returns a list of emoji objects for the given guild.
@@ -20,15 +20,14 @@ export interface GetGuildEmoji {
 }
 
 /**
- * Create a new emoji for the guild. Returns the new emoji object on success. Fires a Guild Emojis
+ * Create a new emoji for the guild. Requires the `MANAGE_EMOJIS_AND_STICKERS`
+ * permission. Returns the new emoji object on success. Fires a Guild Emojis
  * Update Gateway event.
  *
- * Requires the `MANAGE_EMOJIS_AND_STICKERS` permission.
- *
  * @remarks
- * - Emojis and animated emojis have a maximum file size of 256kb. Attempting to upload an emoji
- * larger than this limit will fail and return `400 Bad Request` and an error message, but not a
- * JSON status code.
+ * - Emojis and animated emojis have a maximum file size of 256kb. Attempting to
+ * upload an emoji larger than this limit will fail and return `400 Bad Request`
+ * and an error message, but not a JSON status code.
  * - This endpoint supports the `X-Audit-Log-Reason` header.
  *
  * @endpoint [POST](https://discord.com/developers/docs/resources/emoji#create-guild-emoji) `/guilds/{guild.id}/emojis`
@@ -46,19 +45,18 @@ export interface CreateGuildEmoji {
 		image: string;
 
 		/**
-		 * Roles for which this emoji will be whitelisted.
+		 * Roles allowed to use this emoji.
 		 */
-		roles?: Snowflake[];
+		roles: snowflake[];
 	};
 
 	response: Emoji;
 }
 
 /**
- * Modify the given emoji. Returns the updated emoji object on success. Fires a Guild Emojis Update
+ * Modify the given emoji. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission.
+ * Returns the updated emoji object on success. Fires a Guild Emojis Update
  * Gateway event.
- *
- * Requires the `MANAGE_EMOJIS_AND_STICKERS` permission.
  *
  * @remarks
  * This endpoint supports the `X-Audit-Log-Reason` header.
@@ -75,17 +73,16 @@ export interface ModifyGuildEmoji {
 		/**
 		 * Roles for which this emoji will be whitelisted.
 		 */
-		roles?: Nullable<Snowflake[]>;
+		roles?: Nullable<snowflake[]>;
 	};
 
 	response: Emoji;
 }
 
 /**
- * Delete the given emoji. Returns `204 No Content` on success. Fires a Guild Emojis Update Gateway
+ * Delete the given emoji. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission.
+ * Returns `204 No Content` on success. Fires a Guild Emojis Update Gateway
  * event.
- *
- * Requires the `MANAGE_EMOJIS_AND_STICKERS` permission.
  *
  * @remarks
  * This endpoint supports the `X-Audit-Log-Reason` header.

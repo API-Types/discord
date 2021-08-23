@@ -1,26 +1,29 @@
-import type { Nullable } from 'extended-utility-types';
-import type { Snowflake, StatusType } from '../../';
-import type { Identifiable, WithType } from '../../__internal__';
+import type { Nullable, Tuple } from 'extended-utility-types';
+import type { snowflake, StatusType } from '../../';
 
 /**
- * Active sessions are indicated with an `online`, `idle`, or `dnd` string per platform. If a user
- * is offline or invisible, the corresponding field is not present.
+ * Active sessions are indicated with an `"online"`, `"idle"`, or `"dnd"` string
+ * per platform. If a user is offline or invisible, the corresponding field is
+ * not present.
  *
  * @source {@link https://discord.com/developers/docs/topics/gateway#client-status-object|Gateway}
  */
 export interface ClientStatus {
 	/**
-	 * The user's status set for an active desktop (Windows, Linux, Mac) application session.
+	 * The user's status set for an active desktop (Windows, Linux, Mac)
+	 * application session.
 	 */
 	desktop?: ClientStatusType;
 
 	/**
-	 * The user's status set for an active mobile (iOS, Android) application session.
+	 * The user's status set for an active mobile (iOS, Android) application
+	 * session.
 	 */
 	mobile?: ClientStatusType;
 
 	/**
-	 * The user's status set for an active web (browser, bot account) application session.
+	 * The user's status set for an active web (browser, bot account)
+	 * application session.
 	 */
 	web?: ClientStatusType;
 }
@@ -33,7 +36,7 @@ export type ClientStatusType = Omit<StatusType, 'offline' | 'invisible'>;
  *
  * @source {@link https://discord.com/developers/docs/topics/gateway#activity-object-activity-structure|Gateway}
  */
-export interface Activity extends WithType<ActivityType> {
+export interface Activity {
 	/**
 	 * The activity's ID.
 	 */
@@ -45,7 +48,12 @@ export interface Activity extends WithType<ActivityType> {
 	name: string;
 
 	/**
-	 * Stream URL, is validated when type is `1`.
+	 * Activity type.
+	 */
+	type: ActivityType;
+
+	/**
+	 * Stream URL. Validated when type is `1`.
 	 */
 	url?: Nullable<string>;
 
@@ -72,7 +80,7 @@ export interface Activity extends WithType<ActivityType> {
 	/**
 	 * Application ID for the game.
 	 */
-	application_id?: Snowflake;
+	application_id?: snowflake;
 
 	/**
 	 * What the player is currently doing.
@@ -122,7 +130,7 @@ export interface Activity extends WithType<ActivityType> {
 	/**
 	 * The custom buttons shown in the Rich Presence.
 	 */
-	buttons?: [ActivityButton, ActivityButton?];
+	buttons?: Partial<Tuple<ActivityButton, 2>>;
 }
 
 export type ActivityGamePlatform = 'desktop' | 'samsung' | 'xbox' | 'ios' | 'android' | 'embedded';
@@ -134,37 +142,39 @@ export type ActivityGamePlatform = 'desktop' | 'samsung' | 'xbox' | 'ios' | 'and
  *
  * @source {@link https://discord.com/developers/docs/topics/gateway#activity-object-activity-types|Gateway}
  */
+/* eslint-disable tsdoc/syntax */
 export enum ActivityType {
 	/**
-	 * @example 'Playing \{name\}'
+	 * @example 'Playing {name}'
 	 */
 	Game,
 
 	/**
-	 * @example 'Streaming \{details\}'
+	 * @example 'Streaming {details}'
 	 */
 	Streaming,
 
 	/**
-	 * @example 'Listening to \{name\}'
+	 * @example 'Listening to {name}'
 	 */
 	Listening,
 
 	/**
-	 * @example 'Watching \{name\}'
+	 * @example 'Watching {name}'
 	 */
 	Watching,
 
 	/**
-	 * @example '\{emoji\} \{name\}'
+	 * @example '{emoji} {name}'
 	 */
 	Custom,
 
 	/**
-	 * @example 'Competing in \{name\}'
+	 * @example 'Competing in {name}'
 	 */
 	Competing
 }
+/* eslint-enable tsdoc/syntax */
 
 /**
  * @source {@link https://discord.com/developers/docs/topics/gateway#activity-object-activity-timestamps|Gateway}
@@ -184,11 +194,16 @@ export interface ActivityTimestamps {
 /**
  * @source {@link https://discord.com/developers/docs/topics/gateway#activity-object-activity-emoji|Gateway}
  */
-export interface ActivityEmoji extends Partial<Identifiable> {
+export interface ActivityEmoji {
 	/**
 	 * The name of the emoji.
 	 */
 	name: string;
+
+	/**
+	 * The ID of the emoji.
+	 */
+	id?: snowflake;
 
 	/**
 	 * Whether this emoji is animated.
@@ -199,7 +214,12 @@ export interface ActivityEmoji extends Partial<Identifiable> {
 /**
  * @source {@link https://discord.com/developers/docs/topics/gateway#activity-object-activity-party|Gateway}
  */
-export interface ActivityParty extends Partial<Identifiable> {
+export interface ActivityParty {
+	/**
+	 * The ID of the party.
+	 */
+	id?: string;
+
 	/**
 	 * Used to show the party's current and maximum size.
 	 */
@@ -267,8 +287,9 @@ export enum ActivityFlags {
 }
 
 /**
- * When received over the gateway, the `buttons` field is an array of strings, which are the button
- * labels. Bots cannot access a user's activity button URLs.
+ * When received over the gateway, the `buttons` field is an array of strings,
+ * which are the button labels. Bots cannot access a user's activity button
+ * URLs.
  */
 export interface ActivityButton {
 	/**

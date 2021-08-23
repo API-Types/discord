@@ -1,1 +1,2 @@
-export * from './SlashCommands';
+export * from './ApplicationCommands';
+export * from './Handling';

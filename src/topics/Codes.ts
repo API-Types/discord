@@ -1,6 +1,6 @@
 /**
- * Your connection to the gateway may sometimes close. When it does, you will receive a close code
- * that tells you what happened.
+ * Your connection to the gateway may sometimes close. When it does, you will
+ * receive a close code that tells you what happened.
  *
  * @source {@link https://discord.com/developers/docs/topics/opcodes-and-status-codes#gateway-gateway-close-event-codes|Opcodes and Status Codes}
  */
@@ -25,13 +25,14 @@ export enum GatewayCloseCode {
 	AlreadyAuthenticated,
 
 	/**
-	 * The sequence sent when resuming the session was invalid. Reconnect and start a new
-	 * session.
+	 * The sequence sent when resuming the session was invalid. Reconnect and
+	 * start a new session.
 	 */
 	InvalidSequence = 4007,
 
 	/**
-	 * Payloads are being sent too quickly. You will be disconnected on receiving this.
+	 * Payloads are being sent too quickly. You will be disconnected on
+	 * receiving this.
 	 */
 	RateLimited,
 	SessionTimedOut,
@@ -43,7 +44,8 @@ export enum GatewayCloseCode {
 }
 
 /**
- * All gateway events in Discord are tagged with an opcode that denotes the payload type.
+ * All gateway events in Discord are tagged with an opcode that denotes the
+ * payload type.
  *
  * @source {@link https://discord.com/developers/docs/topics/opcodes-and-status-codes#gateway-gateway-opcodes|Opcodes and Status Codes}
  */
@@ -54,13 +56,14 @@ export enum GatewayOPCode {
 	Dispatch,
 
 	/**
-	 * Fired periodically by the client to keep the connection alive. The client can send and
-	 * receive this action.
+	 * Fired periodically by the client to keep the connection alive. The client
+	 * can send and receive this action.
 	 */
 	Heartbeat,
 
 	/**
-	 * Starts a new session during the initial handshake. The client can send this action.
+	 * Starts a new session during the initial handshake. The client can send
+	 * this action.
 	 */
 	Identify,
 
@@ -70,49 +73,53 @@ export enum GatewayOPCode {
 	PresenceUpdate,
 
 	/**
-	 * Used to join/leave or move between voice channels. The client can send this action.
+	 * Used to join/leave or move between voice channels. The client can send
+	 * this action.
 	 */
 	VoiceStateUpdate,
 	VoiceGuildPing,
 
 	/**
-	 * Resume a previous session that was disconnected. The client can send this action.
+	 * Resume a previous session that was disconnected. The client can send this
+	 * action.
 	 */
 	Resume,
 
 	/**
-	 * You should attempt to reconnect and resume immediately. The client can receive this action.
+	 * You should attempt to reconnect and resume immediately. The client can
+	 * receive this action.
 	 */
 	Reconnect,
 
 	/**
-	 * Request information about offline guild members in a large guild. The client can send this
-	 * action.
+	 * Request information about offline guild members in a large guild. The
+	 * client can send this action.
 	 */
 	RequestGuildMembers,
 
 	/**
-	 * The session has been invalidated. You should reconnect and identify/resume accordingly. The
-	 * client can receive this action.
+	 * The session has been invalidated. You should reconnect and identify/
+	 * resume accordingly. The client can receive this action.
 	 */
 	InvalidSession,
 
 	/**
-	 * Sent immediately after connecting, contains the `heartbeat_interval` to use. The client can
-	 * receive this action.
+	 * Sent immediately after connecting, contains the `heartbeat_interval` to
+	 * use. The client can receive this action.
 	 */
 	Hello,
 
 	/**
-	 * Sent in response to receiving a heartbeat to acknowledge that it has been received. The
-	 * client can receive this action.
+	 * Sent in response to receiving a heartbeat to acknowledge that it has been
+	 * received. The client can receive this action.
 	 */
 	HeartbeatAck
 }
 
 /**
- * The API can return more detailed error codes through a `code` key in a JSON error response.
- * The response will also contain a `message` key containing a more friendly error string.
+ * The API can return more detailed error codes through a `code` key in a JSON
+ * error response. The response will also contain a `message` key containing a
+ * more friendly error string.
  *
  * @source {@link https://discord.com/developers/docs/topics/opcodes-and-status-codes#json-json-error-codes|Opcodes and Status Codes}
  */
@@ -195,8 +202,8 @@ export enum JSONErrorCode {
 	ChannelRateLimited = 20_028,
 
 	/**
-	 * The Stage topic, server name, server description, or channel names contain words that are not
-	 * allowed.
+	 * The Stage topic, server name, server description, or channel names
+	 * contain words that are not allowed.
 	 */
 	InvalidWords = 20_031,
 
@@ -282,6 +289,11 @@ export enum JSONErrorCode {
 	TooManyNonGuildMemberBans = 30_035,
 	TooManyBanFetches = 30_037,
 	TooManyStickers = 30_039,
+
+	/**
+	 * Maximum number of prune requests has been reached. Try again later.
+	 */
+	TooManyPruneRequests,
 	Unauthorized = 40_001,
 	EmailVerificationRequired,
 	DMOpenRateLimited,
@@ -378,8 +390,8 @@ export enum JSONErrorCode {
 	InvalidMessageAge,
 
 	/**
-	 * Invalid form body (returned for both `application/json` and `multipart/form-data` bodies),
-	 * or invalid `Content-Type` provided.
+	 * Invalid form body (returned for both `application/json` and
+	 * `multipart/form-data` bodies), or invalid `Content-Type` provided.
 	 */
 	InvalidFormBody,
 
@@ -451,7 +463,8 @@ export enum JSONErrorCode {
 	InvalidLottieJSON = 170_001,
 
 	/**
-	 * Uploaded Lotties cannot contain rasterized images such as `PNG` or `JPEG`.
+	 * Uploaded Lotties cannot contain rasterized images such as `PNG` or
+	 * `JPEG`.
 	 */
 	InvalidLottieRasterizedImage,
 	StickerFrameRateExceeded,
@@ -528,7 +541,8 @@ export enum RPCErrorCode {
 	InvalidClientID,
 
 	/**
-	 * An invalid OAuth2 application origin was used to authorize or authenticate with.
+	 * An invalid OAuth2 application origin was used to authorize or
+	 * authenticate with.
 	 */
 	InvalidOrigin,
 
@@ -549,7 +563,8 @@ export enum RPCErrorCode {
 	GetGuildTimedOut,
 
 	/**
-	 * You tried to join a user to a voice channel but the user was already in one.
+	 * You tried to join a user to a voice channel but the user was already in
+	 * one.
 	 */
 	SelectVoiceForceRequired,
 	CaptureShortcutAlreadyListening,
@@ -611,8 +626,8 @@ export enum VoiceCloseCode {
 	UnknownProtocol,
 
 	/**
-	 * Channel was deleted, you were kicked, voice server changed, or the main gateway session was
-	 * dropped. Should not reconnect.
+	 * Channel was deleted, you were kicked, voice server changed, or the main
+	 * gateway session was dropped. Should not reconnect.
 	 */
 	Disconnected = 4014,
 	VoiceServerCrashed,
@@ -654,7 +669,8 @@ export enum VoiceOPCode {
 	Speaking,
 
 	/**
-	 * Sent to acknowledge a received client heartbeat. This is sent by the server.
+	 * Sent to acknowledge a received client heartbeat. This is sent by the
+	 * server.
 	 */
 	HeartbeatAck,
 
@@ -664,7 +680,8 @@ export enum VoiceOPCode {
 	Resume,
 
 	/**
-	 * Time to wait between sending heartbeats in milliseconds. This is sent by the server.
+	 * Time to wait between sending heartbeats in milliseconds. This is sent by
+	 * the server.
 	 */
 	Hello,
 
@@ -674,7 +691,8 @@ export enum VoiceOPCode {
 	Resumed,
 
 	/**
-	 * A client has disconnected from the voice channel. This is sent by the server.
+	 * A client has disconnected from the voice channel. This is sent by the
+	 * server.
 	 */
 	ClientDisconnect = 13
 }

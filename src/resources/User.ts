@@ -1,22 +1,22 @@
 import type { Nullable } from 'extended-utility-types';
-import type { PartialIntegration, Snowflake, StatusType } from '../';
-import type { Identifiable, WithType } from '../__internal__';
+import type { PartialIntegration, snowflake, StatusType } from '../';
 
 export interface PartialUser {
 	/**
 	 * The user's ID. Requires the `identify` OAuth2 scope.
 	 */
-	id: Snowflake;
+	id: snowflake;
 
 	/**
-	 * The user's username, not unique across the platform. Requires the `identify` OAuth2 scope.
+	 * The user's username, not unique across the platform. Requires the
+	 * `identify` OAuth2 scope.
 	 */
 	username: string;
 
 	/**
 	 * The user's 4-digit discord-tag. Requires the `identify` OAuth2 scope.
 	 */
-	discriminator: string;
+	discriminator: `${number}`;
 
 	/**
 	 * The user's avatar hash. Requires the `identify` OAuth2 scope.
@@ -25,31 +25,45 @@ export interface PartialUser {
 }
 
 /**
- * Represents a base entity that can spawn across the entire platform, be members of guilds,
- * participate in text and voice chat, and much more. Users are separated by a distinction of "bot"
- * vs "normal." Although they are similar, bot users are automated users that are "owned" by another
- * user. Unlike normal users, bot users do not have a limitation on the number of Guilds they can be
- * a part of.
+ * Users in Discord are generally considered the base entity. Users can spawn
+ * across the entire platform, be members of guilds, participate in text and
+ * voice chat, and much more. Users are separated by a distinction of "bot" vs
+ * "normal." Although they are similar, bot users are automated users that are
+ * "owned" by another user. Unlike normal users, bot users do *not* have a
+ * limitation on the number of Guilds they can be a part of.
  *
  * @source {@link https://discord.com/developers/docs/resources/user#user-object-user-structure|User}
  */
 export interface User extends PartialUser {
 	/**
-	 * Whether the user belongs to an OAuth2 application. Requires the `identify` OAuth2 scope.
+	 * Whether the user belongs to an OAuth2 application. Requires the
+	 * `identify` OAuth2 scope.
 	 */
 	bot?: boolean;
 
 	/**
-	 * Whether the user is an Official Discord System user (part of the urgent message system).
-	 * Requires the `identify` OAuth2 scope.
+	 * Whether the user is an Official Discord System user (part of the urgent
+	 * message system). Requires the `identify` OAuth2 scope.
 	 */
 	system?: boolean;
 
 	/**
-	 * Whether the user has two factor enabled on their account. Requires the `identify` OAuth2
-	 * scope.
+	 * Whether the user has two factor enabled on their account. Requires the
+	 * `identify` OAuth2 scope.
 	 */
 	mfa_enabled?: boolean;
+
+	/**
+	 * The user's banner, or `null` if unset. Requires the `identify` OAuth2
+	 * scope.
+	 */
+	banner?: Nullable<string>;
+
+	/**
+	 * The user's banner color, encoded as an integer representation of a
+	 * hexadecimal color coode. Requires the `identify` OAuth2 scope.
+	 */
+	accent_color?: number;
 
 	/**
 	 * The user's chosen language option. Requires the `identify` OAuth2 scope.
@@ -57,7 +71,8 @@ export interface User extends PartialUser {
 	locale?: string;
 
 	/**
-	 * Whether the email on this account has been verified. Requires the `email` OAuth2 scope.
+	 * Whether the email on this account has been verified. Requires the `email`
+	 * OAuth2 scope.
 	 */
 	verified?: boolean;
 
@@ -72,13 +87,14 @@ export interface User extends PartialUser {
 	flags?: UserFlags;
 
 	/**
-	 * The type of Nitro subscription on a user's account. Requires the `identify` OAuth2
-	 * scope.
+	 * The type of Nitro subscription on a user's account. Requires the
+	 * `identify` OAuth2 scope.
 	 */
 	premium_type?: PremiumType;
 
 	/**
-	 * The public flags on a user's account. Requires the `identify` OAuth2 scope.
+	 * The public flags on a user's account. Requires the `identify` OAuth2
+	 * scope.
 	 */
 	public_flags?: UserFlags;
 }
@@ -117,25 +133,21 @@ export enum PremiumType {
 	Nitro
 }
 
-export interface Profile {
-	user: User;
-	mutual_guilds?: MutualGuild[];
-	connected_accounts: PartialConnection[];
-	premium_since: Nullable<string>;
-	premium_guild_since: Nullable<string>;
-}
-
-export interface MutualGuild extends Identifiable {
-	nick: Nullable<string>;
-}
-
-export interface PartialConnection extends WithType<PlatformType> {
-	readonly id: string;
+export interface PartialConnection {
+	/**
+	 * ID of the connection account.
+	 */
+	id: string;
 
 	/**
 	 * The username of the connection account.
 	 */
 	name: string;
+
+	/**
+	 * The service of the connection.
+	 */
+	type: PlatformType;
 
 	/**
 	 * Whether the connection is verified.
@@ -165,7 +177,8 @@ export interface Connection extends PartialConnection {
 	friend_sync: boolean;
 
 	/**
-	 * Whether activities related to this connection will be shown in presence updates.
+	 * Whether activities related to this connection will be shown in presence
+	 * updates.
 	 */
 	show_activity: boolean;
 
@@ -207,7 +220,22 @@ export enum VisibilityType {
 	Everyone
 }
 
-export interface Relationship extends Identifiable, WithType<RelationshipType> {
+export interface Profile {
+	user: User;
+	mutual_guilds?: MutualGuild[];
+	connected_accounts: PartialConnection[];
+	premium_since: Nullable<string>;
+	premium_guild_since: Nullable<string>;
+}
+
+export interface MutualGuild {
+	id: snowflake;
+	nick: Nullable<string>;
+}
+
+export interface Relationship {
+	id: snowflake;
+	type: RelationshipType;
 	nickname: Nullable<string>;
 	user: User;
 }
@@ -239,21 +267,22 @@ export enum RelationshipType {
 	PendingOutgoing,
 
 	/**
-	 * User is not friends, but interacts with current user often (frequency + recency).
+	 * User is not friends, but interacts with current user often (frequency +
+	 * recency).
 	 */
 	Implicit
 }
 
 export interface UserSettings {
 	/**
-	 * Control how long you need to be inactive on desktop, in minutes, before receiving
-	 * push notifications.
+	 * Control how long you need to be inactive on desktop, in minutes, before
+	 * receiving push notifications.
 	 */
 	afk_timeout: PushNotificationInactiveTimeout;
 
 	/**
-	 * Allows Discord to record when a screen reader is being used while using Discord to improve
-	 * accessibility.
+	 * Allows Discord to record when a screen reader is being used while using
+	 * Discord to improve accessibility.
 	 */
 	allow_accessibility_detection: boolean;
 
@@ -275,8 +304,8 @@ export interface UserSettings {
 	custom_status: CustomStatus;
 
 	/**
-	 * Allow direct messages from guild members. This setting is applied when a new guild is
-	 * joined. It does not apply retroactively to existing guilds.
+	 * Allow direct messages from guild members. This setting is applied when a
+	 * new guild is joined. It does not apply retroactively to existing guilds.
 	 */
 	default_guilds_restricted: boolean;
 	detect_platform_accounts: boolean;
@@ -293,7 +322,8 @@ export interface UserSettings {
 	enable_tts_command: boolean;
 
 	/**
-	 * Automatically scan and delete direct messages received that contain explicit media content.
+	 * Automatically scan and delete direct messages received that contain
+	 * explicit media content.
 	 */
 	explicit_content_filter: ExplicitUserContentFilterLevel;
 	friend_discovery_flags: number;
@@ -308,11 +338,11 @@ export interface UserSettings {
 	 */
 	gif_auto_play: boolean;
 	guild_folders: GuildFolder[];
-	guild_positions: Snowflake[];
+	guild_positions: snowflake[];
 
 	/**
-	 * Display images and videos when uploaded directly to Discord. Images larger than 10MB will not
-	 * be previewed.
+	 * Display images and videos when uploaded directly to Discord. Images
+	 * larger than `10 MB` will not be previewed.
 	 */
 	inline_attachment_media: boolean;
 
@@ -333,11 +363,12 @@ export interface UserSettings {
 	 * Show emoji reactions on messages.
 	 */
 	render_reactions: boolean;
-	restricted_guilds: Snowflake[];
+	restricted_guilds: snowflake[];
 
 	/**
-	 * Display current activity (the game being played if detectable, an activity that supports Rich
-	 * Presence, or a public Stage being attended) as a status message.
+	 * Display current activity (the game being played if detectable, an
+	 * activity that supports Rich Presence, or a public Stage being attended)
+	 * as a status message.
 	 */
 	show_current_game: boolean;
 	status: StatusType;
@@ -357,8 +388,8 @@ export enum AnimateSticker {
 	Always,
 
 	/**
-	 * On the desktop client, stickers will animate on hover or focus. On mobile clients, stickers
-	 * will animate on long-press.
+	 * On the desktop client, stickers will animate on hover or focus. On mobile
+	 * clients, stickers will animate on long-press.
 	 */
 	Interaction,
 	Never
@@ -367,7 +398,7 @@ export enum AnimateSticker {
 export interface CustomStatus {
 	text: string;
 	expires_at: Nullable<string>;
-	emoji_id: Nullable<Snowflake>;
+	emoji_id: Nullable<snowflake>;
 	emoji_name: Nullable<string>;
 }
 
@@ -395,7 +426,7 @@ export interface FriendSources {
 }
 
 export interface GuildFolder {
-	guild_ids: [Snowflake, ...Snowflake[]];
+	guild_ids: [snowflake, ...snowflake[]];
 	id: string | number;
 	name: Nullable<string>;
 	color: Nullable<number>;

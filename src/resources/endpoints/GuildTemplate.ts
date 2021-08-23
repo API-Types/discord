@@ -11,8 +11,8 @@ export interface GetGuildTemplate {
 }
 
 /**
- * Create a new guild based on a template. Returns a guild object on success. Fires a Guild Create
- * Gateway event.
+ * Create a new guild based on a template. Returns a guild object on success.
+ * Fires a Guild Create Gateway event.
  *
  * @remarks
  * This endpoint can be used only by bots in less than `10` guilds.
@@ -36,9 +36,8 @@ export interface CreateGuildFromGuildTemplate {
 }
 
 /**
- * Returns an array of guild template objects.
- *
- * Requires the `MANAGE_GUILD` permission.
+ * Returns an array of guild template objects. Requires the `MANAGE_GUILD`
+ * permission.
  *
  * @endpoint [GET](https://discord.com/developers/docs/resources/guild-template#get-guild-templates) `/guilds/{guild.id}/templates`
  */
@@ -47,9 +46,8 @@ export interface GetGuildTemplates {
 }
 
 /**
- * Creates a template for the guild. Returns the created guild template object on success.
- *
- * Requires the `MANAGE_GUILD` permission.
+ * Creates a template for the guild. Requires the `MANAGE_GUILD` permission.
+ * Returns the created guild template object on success.
  *
  * @endpoint [POST](https://discord.com/developers/docs/resources/guild-template#create-guild-template) `/guilds/{guild.id}/templates`
  */
@@ -70,9 +68,8 @@ export interface CreateGuildTemplate {
 }
 
 /**
- * Syncs the template to the guild's current state. Returns the guild template object on success.
- *
- * Requires the `MANAGE_GUILD` permission.
+ * Syncs the template to the guild's current state. Requires the `MANAGE_GUILD`
+ * permission. Returns the guild template object on success.
  *
  * @endpoint [PUT](https://discord.com/developers/docs/resources/guild-template#get-guild-templates) `/guilds/{guild.id}/templates/{template.code}`
  */
@@ -81,9 +78,8 @@ export interface SyncGuildTemplate {
 }
 
 /**
- * Modifies the template's metadata. Returns the guild template object on success.
- *
- * Requires the `MANAGE_GUILD` permission.
+ * Modifies the template's metadata. Requires the `MANAGE_GUILD` permission.
+ * Returns the guild template object on success.
  *
  * @endpoint [PATCH](https://discord.com/developers/docs/resources/guild-template#modify-guild-template) `/guilds/{guild.id}/templates/{template.code}`
  */
@@ -93,9 +89,8 @@ export interface ModifyGuildTemplate {
 }
 
 /**
- * Deletes the template. Returns the deleted guild template object on success.
- *
- * Requires the `MANAGE_GUILD` permission.
+ * Deletes the template. Requires the `MANAGE_GUILD` permission. Returns the
+ * deleted guild template object on success.
  *
  * @endpoint [DELETE](https://discord.com/developers/docs/resources/guild-template#delete-guild-template) `/guilds/{guild.id}/templates/{template.code}`
  */
