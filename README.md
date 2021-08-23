@@ -17,12 +17,12 @@ npm install -D @api-typings/discord
 
 ```js
 // Common JS
-const { Guild, Snowflake } = require('@api-typings/discord');
+const { Guild, snowflake } = require('@api-typings/discord');
 // ES Module
-import { Guild, Snowflake } from '@api-typings/discord';
+import { Guild, snowflake } from '@api-typings/discord';
 
 /**
- * @param {Snowflake} id - The ID of the guild to get.
+ * @param {snowflake} id - The ID of the guild to get.
  * @returns {Promise<Guild>}
  */ 
 async function getGuild(id) { ... }
@@ -31,12 +31,12 @@ async function getGuild(id) { ... }
 #### TypeScript
 
 ```ts
-import type { Guild, Snowflake } from '@api-typings/discord';
+import type { Guild, snowflake } from '@api-typings/discord';
 
 /**
  * @param id - The ID of the guild to get.
  */ 
-async function getGuild(id: Snowflake): Promise<Guild> { ... }
+async function getGuild(id: snowflake): Promise<Guild> { ... }
 ```
 
 ### Structure
@@ -61,6 +61,7 @@ resources/
 │   ├── Application.ts
 │   ├── AuditLog.ts
 │   └── Channel.ts
+│   └── ...
 ├── Application.ts
 ├── AuditLog.ts
 ├── Channel.ts
