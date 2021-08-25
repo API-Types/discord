@@ -155,15 +155,19 @@ export enum JSONErrorCode {
 	UnknownStoreDirectoryLayout,
 	UnknownRedistributable = 10_036,
 	UnknownGiftCode = 10_038,
+	UnknownStream = 10_049,
+	UnknownPremiumServerSubscribeCooldown,
 	UnknownGuildTemplate = 10_057,
 	UnknownDiscoveryCategory = 10_059,
 	UnknownSticker,
 	UnknownInteraction = 10_062,
 	UnknownApplicationCommand,
-	UnknownApplicationCommandPermissions,
-	UnknownStageInstance = 10_067,
+	UnknownApplicationCommandPermissions = 10_066,
+	UnknownStageInstance,
 	UnknownGuildMemberVerificationForm,
 	UnknownGuildWelcomeScreen,
+	UnknownGuildScheduledEvent,
+	UnknownGuildScheduledEventUser,
 
 	/**
 	 * Bots cannot use this endpoint.
@@ -213,54 +217,54 @@ export enum JSONErrorCode {
 	InvalidGuildPremiumSubscriptionLevel = 20_035,
 
 	/**
-	 * Maximum number of guilds reached (100).
+	 * Maximum number of guilds reached (`100`).
 	 */
 	TooManyGuilds = 30_001,
 
 	/**
-	 * Maximum number of friends reached (1000).
+	 * Maximum number of friends reached (`1000`).
 	 */
 	TooManyFriends,
 
 	/**
-	 * Maximum number of pins reached for the channel (50).
+	 * Maximum number of pins reached for the channel (`50`).
 	 */
 	TooManyPinsInChannel,
 
 	/**
-	 * Maximum number of recipients reached (10).
+	 * Maximum number of recipients reached (`10`).
 	 */
 	TooManyRecipients,
 
 	/**
-	 * Maximum number of guild roles reached (250).
+	 * Maximum number of guild roles reached (`250`).
 	 */
 	TooManyGuildRoles,
 	TooManyUsingUsername,
 
 	/**
-	 * Maximum number of webhooks reached (10).
+	 * Maximum number of webhooks reached (`10`).
 	 */
 	TooManyWebhooks,
 	TooManyEmojis,
 
 	/**
-	 * Maximum number of reactions reached (20).
+	 * Maximum number of reactions reached (`20`).
 	 */
 	TooManyReactions = 30_010,
 
 	/**
-	 * Maximum number of channels reached (500).
+	 * Maximum number of guild channels reached (`500`).
 	 */
 	TooManyChannels = 30_013,
 
 	/**
-	 * Maximum number of attachments in a message reached (10).
+	 * Maximum number of attachments in a message reached (`10`).
 	 */
 	TooManyAttachments = 30_015,
 
 	/**
-	 * Maximum number of invites reached (1000).
+	 * Maximum number of invites reached (`1000`).
 	 */
 	TooManyInvites,
 	TooManyAnimatedEmojis = 30_018,
@@ -268,12 +272,12 @@ export enum JSONErrorCode {
 	NotEnoughGuildMembers = 30_029,
 
 	/**
-	 * Maximum number of server categories has been reached (5).
+	 * Maximum number of server categories has been reached (`5`).
 	 */
 	TooManyGuildCategories,
 
 	/**
-	 * Maximum number of guild discovery subcategories has been reached (5).
+	 * Maximum number of guild discovery subcategories has been reached (`5`).
 	 */
 	TooManyDiscoverySubcategories,
 
@@ -427,6 +431,12 @@ export enum JSONErrorCode {
 	 * `before` value is earlier than the thread creation date.
 	 */
 	InvalidBeforeThreadCreationDateValue,
+
+	/**
+	 * This server is not available in your location.
+	 */
+	InvalidCountryCode = 50_095,
+	InvalidCannotFriendSelf,
 	MFAEnabled = 60_001,
 	MFADisabled,
 	MFARequired,
