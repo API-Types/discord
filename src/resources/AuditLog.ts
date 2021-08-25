@@ -3,6 +3,8 @@ import type {
 	AutoArchiveDuration,
 	DefaultMessageNotificationLevel,
 	ExplicitContentFilterLevel,
+	GuildScheduledEventEntityType,
+	GuildScheduledEventStatus,
 	IntegrationExpireBehavior,
 	MFALevel,
 	Overwrite,
@@ -142,6 +144,9 @@ export enum AuditLogEvent {
 	StickerCreate = 90,
 	StickerUpdate,
 	StickerDelete,
+	GuildScheduledEventCreate = 100,
+	GuildScheduledEventUpdate,
+	GuildScheduledEventDelete,
 	ThreadCreate = 110,
 	ThreadUpdate,
 	ThreadDelete
@@ -569,4 +574,19 @@ export interface AuditLogChangeKey {
 	 * Default auto archive duration for newly created threads changed.
 	 */
 	default_auto_archive_duration: AutoArchiveDuration;
+
+	/**
+	 * Entity type of a guild scheduled event was changed.
+	 */
+	entity_type: GuildScheduledEventEntityType;
+
+	/**
+	 * Status of a guild scheduled event was changed.
+	 */
+	status: GuildScheduledEventStatus;
+
+	/**
+	 * The SKUs of a guild event was changed.
+	 */
+	sku_ids: snowflake[];
 }

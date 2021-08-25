@@ -231,6 +231,11 @@ export enum PermissionFlags {
 	RequestToSpeak = 1 << 32,
 
 	/**
+	 * Allows for creating and deleting events.
+	 */
+	ManageEvents = 1 << 33,
+
+	/**
 	 * Allows for deleting and archiving threads, and viewing all private
 	 * threads. Applies to text channels.
 	 *

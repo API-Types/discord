@@ -5,6 +5,7 @@ export * from './Channel';
 export * from './Discovery';
 export * from './Emoji';
 export * from './Guild';
+export * from './GuildEvent';
 export * from './GuildTemplate';
 export * from './Invite';
 export * from './StageInstance';
