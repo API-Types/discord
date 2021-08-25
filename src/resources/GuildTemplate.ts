@@ -11,7 +11,7 @@ export interface GuildTemplate {
 	/**
 	 * The template code (unique ID).
 	 */
-	readonly code: string;
+	code: string;
 
 	/**
 	 * Template name.
@@ -26,40 +26,40 @@ export interface GuildTemplate {
 	/**
 	 * Number of times this template has been used.
 	 */
-	readonly usage_count: number;
+	usage_count: number;
 
 	/**
 	 * The ID of the user who created the template.
 	 */
-	readonly creator_id: snowflake;
+	creator_id: snowflake;
 
 	/**
 	 * The user who created the template.
 	 */
-	readonly creator: User;
+	creator: User;
 
 	/**
 	 * When this template was created.
 	 */
-	readonly created_at: string;
+	created_at: string;
 
 	/**
 	 * When this template was last synced to the source guild.
 	 */
-	readonly updated_at: string;
+	updated_at: string;
 
 	/**
 	 * The ID of the guild this template is based on.
 	 */
-	readonly source_guild_id: snowflake;
+	source_guild_id: snowflake;
 
 	/**
 	 * The guild snapshot this template contains.
 	 */
-	readonly serialized_source_guild: PartialGuild;
+	serialized_source_guild: PartialGuild;
 
 	/**
 	 * Whether the template has unsynced changes.
 	 */
-	readonly is_dirty: Nullable<boolean>;
+	is_dirty: Nullable<boolean>;
 }

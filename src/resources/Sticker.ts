@@ -117,7 +117,7 @@ export interface GuildSticker extends Pick<BaseSticker, 'id' | 'name' | 'descrip
 	/**
 	 * The user that uploaded the guild sticker.
 	 */
-	readonly user?: User;
+	user?: User;
 }
 
 /**
