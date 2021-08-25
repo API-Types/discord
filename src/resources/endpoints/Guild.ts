@@ -1,7 +1,7 @@
 import type { Nullable, Range, Tuple } from 'extended-utility-types';
-import { BaseChannel } from '../';
 import type {
 	Ban,
+	BaseChannel,
 	Channel,
 	ChannelType,
 	DefaultMessageNotificationLevel,

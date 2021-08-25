@@ -1,5 +1,5 @@
 import type { Nullable, Tuple } from 'extended-utility-types';
-import { snowflake } from '../';
+import type { snowflake } from '../';
 
 /**
  * Used to represent a guild's Discovery settings.

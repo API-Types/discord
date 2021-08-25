@@ -10,11 +10,11 @@ import type {
 	snowflake,
 	StageInstance,
 	StatusType,
+	TextChannel,
 	ThreadChannel,
 	User,
 	VoiceState
 } from '../';
-import { TextChannel } from './';
 
 export interface PartialGuild {
 	/**
