@@ -1030,6 +1030,79 @@ export enum WidgetStyle {
 }
 
 /**
+ * Returns the discovery metadata object for the guild. Requires the
+ * `MANAGE_GUILD` permission.
+ *
+ * @endpoint [GET](https://discord.com/developers/docs/resources/guild#get-guild-discovery-metadata) `/guilds/{guild.id}/discovery-metadata`
+ */
+export interface GetGuildDiscoveryMetadata {
+	response: DiscoveryMetadata;
+}
+
+/**
+ * Modify the discovery metadata for the guild. Requires the `MANAGE_GUILD`
+ * permission. Returns the updated discovery metadata object on success.
+ *
+ * @endpoint [PATCH](https://discord.com/developers/docs/resources/guild#modify-guild-discovery-metadata) `/guilds/{guild.id}/discovery-metadata`
+ */
+export interface ModifyGuildDiscoveryMetadata {
+	body: {
+		/**
+		 * The ID of the primary discovery category.
+		 *
+		 * @defaultValue `0`
+		 */
+		primary_category_id?: Nullable<number>;
+
+		/**
+		 * Up to `10` discovery search keywords.
+		 *
+		 * @defaultValue `null`
+		 */
+		keywords?: Nullable<Partial<Tuple<string, 10>>>;
+
+		/**
+		 * Whether guild info is shown when custom emojis are clicked.
+		 *
+		 * @defaultValue `true`
+		 */
+		emoji_discoverability_enabled?: Nullable<boolean>;
+	};
+
+	response: DiscoveryMetadata;
+}
+
+/**
+ * Add a discovery subcategory to the guild. Requires the `MANAGE_GUILD`
+ * permission.
+ *
+ * @endpoint [POST](https://discord.com/developers/docs/resources/guild#add-guild-discovery-subcategory) `/guilds/{guild.id}/discovery-categories/{category.id}`
+ */
+export interface AddGuildDiscoverySubcategory {
+	response: {
+		/**
+		 * The guild ID the subcategory was added to.
+		 */
+		guild_id: snowflake;
+
+		/**
+		 * The ID of the subcategory added.
+		 */
+		category_id: number;
+	};
+}
+
+/**
+ * Removes a discovery subcategory from the guild. Requires the `MANAGE_GUILD`
+ * permission. Returns a `204 No Content` on success.
+ *
+ * @endpoint [DELETE](https://discord.com/developers/docs/resources/guild#remove-guild-discovery-subcategory) `/guilds/{guild.id}/discovery-categories/{category.id}`
+ */
+export interface RemoveGuildDiscoverySubcategory {
+	response: never;
+}
+
+/**
  * Returns the Welcome Screen object for the guild.
  *
  * @endpoint [GET](https://discord.com/developers/docs/resources/guild#get-guild-welcome-screen) `/guilds/{guild.id}/welcome-screen`
@@ -1121,79 +1194,6 @@ export interface ModifyCurrentUserVoiceState {
  */
 export interface ModifyUserVoiceState {
 	body: Omit<ModifyCurrentUserVoiceState['body'], 'request_to_speak_timestamp'>;
-}
-
-/**
- * Returns the discovery metadata object for the guild. Requires the
- * `MANAGE_GUILD` permission.
- *
- * @endpoint GET `/guilds/{guild.id}/discovery-metadata`
- */
-export interface GetGuildDiscoveryMetadata {
-	response: DiscoveryMetadata;
-}
-
-/**
- * Modify the discovery metadata for the guild. Requires the `MANAGE_GUILD`
- * permission.
- *
- * @endpoint PATCH `/guilds/{guild.id}/discovery-metadata`
- */
-export interface ModifyGuildDiscoveryMetadata {
-	body: {
-		/**
-		 * The ID of the primary discovery category.
-		 *
-		 * @defaultValue `0`
-		 */
-		primary_category_id?: Nullable<number>;
-
-		/**
-		 * Discovery search keywords.
-		 *
-		 * @defaultValue `null`
-		 */
-		keywords?: Nullable<Partial<Tuple<string, 10>>>;
-
-		/**
-		 * Whether guild info is shown when custom emojis are clicked.
-		 *
-		 * @defaultValue `true`
-		 */
-		emoji_discoverability_enabled?: Nullable<boolean>;
-	};
-
-	response: DiscoveryMetadata;
-}
-
-/**
- * Add a discovery subcategory to the guild. Requires the `MANAGE_GUILD`
- * permission.
- *
- * @endpoint POST `/guilds/{guild.id}/discovery-categories/{category.id}`
- */
-export interface AddGuildDiscoverySubcategory {
-	response: {
-		/**
-		 * ID of the guild.
-		 */
-		guild_id: snowflake;
-
-		/**
-		 * The ID of the subcategory added.
-		 */
-		category_id: number;
-	};
-}
-
-/**
- * Removes a discovery subcategory from the guild. Requires the `MANAGE_GUILD`
- * permission.
- *
- * @endpoint DELETE `/guilds/{guild.id}/discovery-categories/{category.id}`
- */
-export interface RemoveGuildDiscoverySubcategory {
-	response: never;
 }
 
 /**

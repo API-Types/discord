@@ -272,9 +272,9 @@ export enum JSONErrorCode {
 	NotEnoughGuildMembers = 30_029,
 
 	/**
-	 * Maximum number of server categories has been reached (`5`).
+	 * Maximum number of guild discovery subcategories has been reached (`5`).
 	 */
-	TooManyGuildCategories,
+	TooManyGuildDiscoverySubcategories,
 
 	/**
 	 * Maximum number of guild discovery subcategories has been reached (`5`).
