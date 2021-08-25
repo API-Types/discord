@@ -30,7 +30,7 @@ export interface PartialEmoji {
  *
  * @source {@link https://discord.com/developers/docs/resources/emoji#emoji-object-emoji-structure|Emoji}
  */
-export interface Emoji extends Readonly<PartialEmoji> {
+export interface Emoji extends PartialEmoji {
 	/**
 	 * Roles allowed to use this emoji.
 	 */
