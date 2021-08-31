@@ -2,7 +2,6 @@ import type { Nullable, Range } from 'extended-utility-types';
 import type {
 	Activity,
 	Application,
-	ApplicationCommand,
 	Channel,
 	ClientStatus,
 	Emoji,
@@ -49,9 +48,6 @@ export type GatewayEventPayload =
 	| Resumed
 	| Reconnect
 	| InvalidSession
-	| ApplicationCommandCreate
-	| ApplicationCommandUpdate
-	| ApplicationCommandDelete
 	| ChannelCreate
 	| ChannelUpdate
 	| ChannelDelete
@@ -1464,44 +1460,6 @@ export interface WebhooksUpdate extends EventPayload<GatewayEvent.WebhooksUpdate
 		 */
 		channel_id: snowflake;
 	};
-}
-
-/**
- * Sent when a new Slash Command is created, relevant to the current user. The
- * inner payload is an ApplicationCommand object, with an optional extra
- * `guild_id` key.
- *
- * @source {@link https://discord.com/developers/docs/topics/gateway#application-command-create|Gateway}
- */
-export interface ApplicationCommandCreate extends EventPayload<GatewayEvent.ApplicationCommandCreate> {
-	d: ApplicationCommand & {
-		/**
-		 * ID of the guild the command is in.
-		 */
-		guild_id?: snowflake;
-	};
-}
-
-/**
- * Sent when a new Slash Command relevant to the current user is updated. The
- * inner payload is an ApplicationCommand object, with an optional extra
- * `guild_id` key.
- *
- * @source {@link https://discord.com/developers/docs/topics/gateway#application-command-update|Gateway}
- */
-export interface ApplicationCommandDelete extends EventPayload<GatewayEvent.ApplicationCommandDelete> {
-	d: ApplicationCommandCreate['d'];
-}
-
-/**
- * Sent when a new Slash Command relevant to the current user is deleted. The
- * inner payload is an ApplicationCommand object, with an optional extra
- * `guild_id` key.
- *
- * @source {@link https://discord.com/developers/docs/topics/gateway#application-command-delete|Gateway}
- */
-export interface ApplicationCommandUpdate extends EventPayload<GatewayEvent.ApplicationCommandUpdate> {
-	d: ApplicationCommandCreate['d'];
 }
 
 /**

@@ -1,10 +1,15 @@
 import type { Nullable, Tuple } from 'extended-utility-types';
-import { snowflake } from '../';
+import type { snowflake } from '../';
 
 /**
  * Used to represent a guild's Discovery settings.
+ *
+ * @source {@link https://discord.com/developers/docs/resources/discovery#discovery-metadata-object-discovery-metadata-structure|Discovery}
  */
 export interface DiscoveryMetadata {
+	/**
+	 * The guild ID.
+	 */
 	guild_id: snowflake;
 
 	/**
@@ -40,6 +45,9 @@ export interface DiscoveryMetadata {
 	category_ids: Partial<Tuple<number, 5>>;
 }
 
+/**
+ * @source {@link https://discord.com/developers/docs/resources/discovery#discovery-category-object-discovery-category-structure|Discovery}
+ */
 export interface DiscoveryCategory {
 	/**
 	 * Numeric ID of the category.
@@ -57,6 +65,9 @@ export interface DiscoveryCategory {
 	is_primary: boolean;
 }
 
+/**
+ * @source {@link https://discord.com/developers/docs/resources/discovery#discovery-category-object-discovery-category-name-structure|Discovery}
+ */
 export interface DiscoveryCategoryName {
 	/**
 	 * The name in English.

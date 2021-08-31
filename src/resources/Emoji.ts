@@ -30,7 +30,7 @@ export interface PartialEmoji {
  *
  * @source {@link https://discord.com/developers/docs/resources/emoji#emoji-object-emoji-structure|Emoji}
  */
-export interface Emoji extends Readonly<PartialEmoji> {
+export interface Emoji extends PartialEmoji {
 	/**
 	 * Roles allowed to use this emoji.
 	 */
@@ -82,18 +82,4 @@ export interface GatewayReactionCustomEmoji {
 	id: snowflake;
 	name: Nullable<string>;
 	animated?: boolean;
-}
-
-export enum EmojiDisabledReason {
-	DisallowExternal = 'DISALLOW_EXTERNAL',
-	GuildSubscriptionUnavailable = 'GUILD_SUBSCRIPTION_UNAVAILABLE',
-	PremiumLocked = 'PREMIUM_LOCKED'
-}
-
-export enum EmojiIntention {
-	Reaction = 'REACTION',
-	Status = 'STATUS',
-	CommunityContent = 'COMMUNITY_CONTENT',
-	GuildStickerRelatedEmoji = 'GUILD_STICKER_RELATED_EMOJI',
-	GuildRoleBenefitEmoji = 'GUILD_ROLE_BENEFIT_EMOJI'
 }
