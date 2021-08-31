@@ -462,6 +462,11 @@ export enum JSONErrorCode {
 	ListingJoinBlocked,
 	APIResourceOverloaded = 130_000,
 	StageAlreadyOpen = 150_006,
+
+	/**
+	 * Cannot reply without permission to read message history.
+	 */
+	InvalidPermissionsReply = 160_002,
 	ThreadAlreadyCreated = 160_004,
 	ThreadLocked,
 	TooManyThreads,
