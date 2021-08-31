@@ -117,4 +117,9 @@ export interface GuildEventEntityMetadata {
 	 * The speakers of the stage channel.
 	 */
 	speaker_ids?: snowflake[];
+
+	/**
+	 * Location of the event.
+	 */
+	location?: string;
 }

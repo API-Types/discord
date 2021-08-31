@@ -1032,7 +1032,7 @@ export interface GuildRoleDelete extends EventPayload<GatewayEvent.GuildRoleDele
 }
 
 /**
- * Sent when a guild event is created.
+ * Sent when a guild event is created. The inner payload is a Guild Event.
  *
  * @source {@link https://discord.com/developers/docs/topics/gateway#guild-scheduled-event-create|Gateway}
  */
@@ -1041,7 +1041,7 @@ export interface GuildScheduledEventCreate extends EventPayload<GatewayEvent.Gui
 }
 
 /**
- * Sent when a guild event is updated.
+ * Sent when a guild event is updated. The inner payload is a Guild Event.
  *
  * @source {@link https://discord.com/developers/docs/topics/gateway#guild-scheduled-event-update|Gateway}
  */
@@ -1050,7 +1050,7 @@ export interface GuildScheduledEventUpdate extends EventPayload<GatewayEvent.Gui
 }
 
 /**
- * Sent when a guild event is deleted.
+ * Sent when a guild event is deleted. The inner payload is a Guild Event.
  *
  * @source {@link https://discord.com/developers/docs/topics/gateway#guild-scheduled-event-delete|Gateway}
  */
