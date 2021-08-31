@@ -13,8 +13,6 @@ export * from './topics';
  */
 export const DiscordEpoch = 1_420_070_400_000;
 
-export const DefaultRoleColor = '#99AAB5';
-
 export enum BaseURL {
 	/**
 	 * @source {@link https://discord.com/developers/docs/reference#api-reference-base-url|Reference}
@@ -151,105 +149,4 @@ export enum TimestampStyle {
 	 * @example '2 months ago'
 	 */
 	RelativeTime = 'R'
-}
-
-export enum DiscordColor {
-	Blurple = '#5865f2',
-	Green = '#57F287',
-	Yellow = '#FEE75C',
-	Fuchsia = '#EB459E',
-	Red = '#ED4245'
-}
-
-export enum DiscordLimit {
-	MaxUserGuilds = 100,
-	MaxUserGuildsPremium = 200,
-	MaxMessagesPerChannel = 50,
-	MaxMessagesForJump = 50,
-	MaxMentionsPerFetch = 25,
-	MaxLoadedMessages = 200,
-	TruncatedMessageViewSize = 100,
-	MaxMessageCacheSize = 250,
-	MaxMessageLength = 2000,
-	MaxMessageLengthPremium = 4000,
-	MaxTTSLength = 200,
-	MaxPinsPerChannel = 50,
-	MaxChannelNameLength = 100,
-	NoteMaxLength = 256,
-	IdleDuration = 600_000,
-	TypingTimeout = 10_000,
-	TypingDelayLocal = 1500,
-	MaxTypingUsers = 5,
-	SlowmodeCooldownBufferMS = 100,
-	MaxRoleLength = 32,
-	MaxAttachmentSize = 8_388_608,
-	MaxPremiumTier1AttachmentSize = 52_428_800,
-	MaxPremiumTier2AttachmentSize = 104_857_600,
-	MaxStaffAttachmentSize = 209_715_200,
-	MaxPremiumGuildTier2AttachmentSize = 52_428_800,
-	MaxPremiumGuildTier3AttachmentSize = 104_857_600,
-	EmbedLifetime = 7_200_000,
-	MaxGamesNews = 100,
-	AvatarSize = 128,
-	AvatarMaxSize = 1024,
-	UserBannerMaxWidth = 2400,
-	UserBannerMaxHeight = 960,
-	SplashSize = 2048,
-	MaxPTTReleaseDelay = 200,
-	BitrateMin = 800,
-	BitrateDefault = 64_000,
-	BitrateMax = 96_000,
-	MaxVoiceUserLimit = 99,
-	MaxMutualGuilds = 5,
-	MaxGroupDMParticipants = 10,
-	MaxGroupDMStaffParticipants = 25,
-	MaxAutocompleteResults = 10,
-	SmallGuildMemberThreshold = 30,
-	SearchPageSize = 25,
-	EmojiMaxSlots = 50,
-	EmojiMaxSlotsMore = 200,
-	EmojiMaxLength = 32,
-	EmojiMaxFilesizeKB = 256,
-	MaxGuildFolderNameLength = 32,
-	MaxImageWidth = 2560,
-	MaxImageHeight = 2560,
-	AuditLogPageLimit = 50,
-	MaxReasonLength = 256,
-	MaxVideoWidth = 3840,
-	MaxVideoHeight = 2160,
-	RequestDataLimitDays = 30,
-	MaxMembersNotifyAllMessages = 2500,
-	WelcomeOldGuildAgeThreshold = 2_592_000_000,
-	ReactionTooltipMaxUsers = 3,
-	DefaultNumReactionUsers = 100
-}
-
-export enum LoginState {
-	None = 'NONE',
-	LoggingIn = 'LOGGIN_IN',
-	AccountScheduledForDeletion = 'ACCOUNT_SCHEDULED_FOR_DELETION',
-	AccountDisabled = 'ACCOUNT_DISABLED',
-	MFAStep = 'MFA_STEP',
-	LoggingInMFA = 'LOGGING_IN_MFA',
-	MFASMSStep = 'MFA_SMS_STEP',
-	LoggingInMFASMS = 'LOGGING_IN_MFA_SMS',
-	LoginAgeGate = 'LOGIN_AGE_GATE',
-	PasswordRecoveryPhoneVerification = 'PASSWORD_RECOVERY_PHONE_VERIFICATION',
-	PasswordRecoveryVerifyPhone = 'PASSWORD_RECOVERY_VERIFY_PHONE',
-	PhoneIPAuthorization = 'PHONE_IP_AUTHORIZATION'
-}
-
-export enum RegistrationState {
-	None = 'NONE',
-	Registering = 'REGISTERING',
-	RegisterAgeGate = 'REGISTER_AGE_GATE',
-	RegisterWithError = 'REGISTER_WITH_ERROR'
-}
-
-export enum FriendSection {
-	AddFriend = 'ADD_FRIEND',
-	All = 'ALL',
-	Online = 'ONLINE',
-	Pending = 'PENDING',
-	Blocked = 'BLOCKED'
 }
