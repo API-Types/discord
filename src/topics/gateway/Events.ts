@@ -139,21 +139,6 @@ export enum GatewayEvent {
 	InvalidSession = 'INVALID_SESSION',
 
 	/**
-	 * New Slash Command was created.
-	 */
-	ApplicationCommandCreate = 'APPLICATION_COMMAND_CREATE',
-
-	/**
-	 * Slash Command was updated.
-	 */
-	ApplicationCommandUpdate = 'APPLICATION_COMMAND_UPDATE',
-
-	/**
-	 * Slash Command was deleted.
-	 */
-	ApplicationCommandDelete = 'APPLICATION_COMMAND_DELETE',
-
-	/**
 	 * New guild channel created.
 	 */
 	ChannelCreate = 'CHANNEL_CREATE',
