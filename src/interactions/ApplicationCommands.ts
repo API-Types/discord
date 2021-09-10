@@ -55,6 +55,12 @@ export interface BaseApplicationCommand {
 	 * @defaultValue `true`
 	 */
 	default_permission?: boolean;
+
+	/**
+	 * Auto-incrementing version identifier updated during substantial record
+	 * changes. Valid for all types.
+	 */
+	version: snowflake;
 }
 
 export interface ChatInputCommand extends BaseApplicationCommand {
