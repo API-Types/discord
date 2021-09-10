@@ -138,7 +138,7 @@ export interface DeleteWebhookWithToken {
  * contain a `filename` parameter.
  * - This endpoint supports both `application/json` and `multipart/form-data`
  * bodies. When uploading files, the `multipart/form-data` content type must be
- * used. Note that in multipart form data, the `embed` and `allowed_mentions`
+ * used. Note that in multipart form data, the `embeds` and `allowed_mentions`
  * fields cannot be used. A stringified JSON body as a form value as
  * `payload_json` can be passed instead. **If a form value for `payload_json` is
  * supplied, all fields except for `file` fields will be ignored in the form
@@ -246,7 +246,7 @@ export interface GetWebhookMessage {
  * contain a `filename` parameter.
  * - This endpoint supports both `application/json` and `multipart/form-data`
  * bodies. When uploading files, the `multipart/form-data` content type must be
- * used. Note that in multipart form data, the `embed` and `allowed_mentions`
+ * used. Note that in multipart form data, the `embeds` and `allowed_mentions`
  * fields cannot be used. A stringified JSON body as a form value as
  * `payload_json` can be passed instead. **If a form value for `payload_json` is
  * supplied, all fields except for `file` fields will be ignored in the form
