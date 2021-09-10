@@ -31,7 +31,7 @@ export interface GetGlobalApplicationCommands {
 export interface CreateGlobalApplicationCommand {
 	body: {
 		/**
-		 * `1-32` lowercase character name matching `^[\w-]{1,32}$`.
+		 * `1-32` character name.
 		 */
 		name: string;
 
@@ -83,7 +83,7 @@ export interface GetGlobalApplicationCommand {
 export interface EditGlobalApplicationCommand {
 	body: {
 		/**
-		 * `1-32` lowercase character name matching `^[\w-]{1,32}$`.
+		 * `1-32` character name.
 		 */
 		name?: string;
 

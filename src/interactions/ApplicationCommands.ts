@@ -6,10 +6,6 @@ import type { snowflake } from '../';
  * Discord. They provide users a first-class way of interacting directly with
  * an application that feels deeply integrated into Discord.
  *
- * @remarks
- * `CHAT_INPUT` command names must be all lowercase matching `^[\w-]{1,32}$`.
- * `USER` and `MESSAGE` commands may be mixed case and can include spaces.
- *
  * @source {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-structure|Application Commands}
  */
 export type ApplicationCommand = ChatInputCommand | UserCommand | MessageCommand;
@@ -138,7 +134,7 @@ export interface ApplicationCommandOption {
 	type: ApplicationCommandOptionType;
 
 	/**
-	 * `1-32` lowercase character name matching `^[\w-]{1,32}$`.
+	 * `1-32` character name.
 	 */
 	name: string;
 
