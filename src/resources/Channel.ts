@@ -1043,7 +1043,7 @@ export interface EmbedThumbnail {
 	 * Source URL of thumbnail or image (only supports http[s] and attachments),
 	 * or video.
 	 */
-	url?: string;
+	url: string;
 
 	/**
 	 * A proxied URL of the thumbnail, image, or video.
@@ -1089,7 +1089,12 @@ export interface EmbedProvider {
 /**
  * @source {@link https://discord.com/developers/docs/resources/channel#embed-object-embed-author-structure|Channel}
  */
-export type EmbedAuthor = Omit<EmbedFooter, 'text'> & EmbedProvider;
+export interface EmbedAuthor extends Omit<EmbedFooter, 'text'>, Pick<EmbedProvider, 'url'> {
+	/**
+	 * Name of provider or author.
+	 */
+	name: string;
+}
 
 /**
  * @source {@link https://discord.com/developers/docs/resources/channel#embed-object-embed-footer-structure|Channel}
