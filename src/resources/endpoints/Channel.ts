@@ -5,11 +5,11 @@ import type {
 	Attachment,
 	AutoArchiveDuration,
 	Channel,
+	ChannelInvite,
 	ChannelType,
 	DMChannel,
 	FollowedChannel,
 	GroupDMChannel,
-	Invite,
 	InviteMetadata,
 	InviteTargetType,
 	Message,
@@ -744,7 +744,7 @@ export interface CreateChannelInvite {
 		  }
 		| Record<string, never>;
 
-	response: Invite;
+	response: ChannelInvite;
 }
 
 /**

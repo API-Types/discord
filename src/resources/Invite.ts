@@ -12,11 +12,15 @@ export interface PartialInvite extends Pick<InviteMetadata, 'uses'> {
 }
 
 /**
- * Represents a code that when used, adds a user to a guild or group DM channel.
+ * Represents a code that when used, adds a user to a guild or group DM channel
+ * or adds a user to the inviter's friends list or opens a DM if they are
+ * already friends.
  *
  * @source {@link https://discord.com/developers/docs/resources/invite#invite-object-invite-structure|Invite}
  */
-export interface Invite {
+export type Invite = ChannelInvite | FriendInvite;
+
+export interface BaseInvite {
 	/**
 	 * The invite code (unique ID).
 	 */
@@ -30,7 +34,7 @@ export interface Invite {
 	/**
 	 * The channel this invite is for.
 	 */
-	channel: PartialChannel;
+	channel: Nullable<PartialChannel>;
 
 	/**
 	 * The user who created the invite.
@@ -79,6 +83,23 @@ export interface Invite {
 }
 
 /**
+ * @source {@link https://discord.com/developers/docs/resources/invite#invite-object-example-channel-invite-object|Invite}
+ */
+export interface ChannelInvite extends Omit<BaseInvite, 'channel'> {
+	/**
+	 * The channel this invite is for.
+	 */
+	channel: PartialChannel;
+}
+
+/**
+ * @source {@link https://discord.com/developers/docs/resources/invite#invite-object-example-friend-invite-object|Invite}
+ */
+export interface FriendInvite extends Required<Pick<BaseInvite, 'code' | 'inviter'>> {
+	readonly channel: null;
+}
+
+/**
  * @source {@link https://discord.com/developers/docs/resources/invite#invite-object-invite-target-typs|Invite}
  */
 export enum InviteTargetType {
@@ -91,7 +112,7 @@ export enum InviteTargetType {
  *
  * @source {@link https://discord.com/developers/docs/resources/invite#invite-metadata-object-invite-metadata-structure|Invite}
  */
-export interface InviteMetadata extends Invite {
+export interface InviteMetadata extends ChannelInvite {
 	/**
 	 * Number of times this invite has been used.
 	 */
