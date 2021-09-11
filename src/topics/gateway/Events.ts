@@ -8,6 +8,7 @@ import type {
 	GatewayOPCode,
 	GatewayReactionEmoji,
 	Guild,
+	GuildEvent,
 	GuildMember,
 	Integration,
 	Interaction,
@@ -264,6 +265,21 @@ export enum GatewayEvent {
 	 * Guild role was deleted.
 	 */
 	GuildRoleDelete = 'GUILD_ROLE_DELETE',
+
+	/**
+	 * Guild event was created.
+	 */
+	GuildScheduledEventCreate = 'GUILD_SCHEDULED_EVENT_CREATE',
+
+	/**
+	 * Guild event was updated.
+	 */
+	GuildScheduledEventUpdate = 'GUILD_SCHEDULED_EVENT_UPDATE',
+
+	/**
+	 * Guild event was deleted.
+	 */
+	GuildScheduledEventDelete = 'GUILD_SCHEDULED_EVENT_DELETE',
 
 	/**
 	 * Guild integration was created.
@@ -994,6 +1010,33 @@ export interface GuildRoleDelete extends EventPayload<GatewayEvent.GuildRoleDele
 		 */
 		role_id: snowflake;
 	};
+}
+
+/**
+ * Sent when a guild event is created. The inner payload is a Guild Event.
+ *
+ * @source {@link https://discord.com/developers/docs/topics/gateway#guild-scheduled-event-create|Gateway}
+ */
+export interface GuildScheduledEventCreate extends EventPayload<GatewayEvent.GuildScheduledEventCreate> {
+	d: GuildEvent;
+}
+
+/**
+ * Sent when a guild event is updated. The inner payload is a Guild Event.
+ *
+ * @source {@link https://discord.com/developers/docs/topics/gateway#guild-scheduled-event-update|Gateway}
+ */
+export interface GuildScheduledEventUpdate extends EventPayload<GatewayEvent.GuildScheduledEventUpdate> {
+	d: GuildEvent;
+}
+
+/**
+ * Sent when a guild event is deleted. The inner payload is a Guild Event.
+ *
+ * @source {@link https://discord.com/developers/docs/topics/gateway#guild-scheduled-event-delete|Gateway}
+ */
+export interface GuildScheduledEventDelete extends EventPayload<GatewayEvent.GuildScheduledEventDelete> {
+	d: GuildEvent;
 }
 
 /**
